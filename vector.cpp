@@ -130,6 +130,20 @@ class vector{
             return arr[index];
         }
 
+        T& front() {
+            if (empty()) {
+                throw std::out_of_range("Vector is empty");
+            }
+            return arr[0];
+        }
+
+        T& back() {
+            if (empty()) {
+                throw std::out_of_range("Vector is empty");
+            }
+            return arr[s - 1];
+        }
+
         // ---------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -151,6 +165,72 @@ class vector{
             }
             s--;
         }
+
+        void assign(size_t count, T& value) {
+            if (count > c) {
+                reserve(count);
+            }
+
+            for (auto i = 0; i < count; ++i) {
+                arr[i] = value;
+            }
+
+            s = count;
+        }
+
+        void insert(size_t pos, T& value) {
+            if (pos > s) {
+                throw std::out_of_range("Position out of range");
+            }
+            if (s == c) {
+                reserve(c + 10);
+            }
+
+            T* temp = new T[s+1];
+            for (auto i = 0; i < pos-1; i++) {
+                temp[i] = arr[i];
+            }
+            arr[pos-1] = value;
+            for (auto i = pos; i < s ; i++) {
+                temp[i] = arr[i-1];
+            }
+
+            s++;
+            delete []arr;
+            arr=temp;
+
+        }
+
+        void erase(size_t pos) {
+            if (pos >= s) {
+                throw std::out_of_range("Position out of range");
+            }
+            
+            T* temp = new T[s-1];
+            for (auto i = 0; i < pos-1 ; i++) {
+                temp[i] = arr[i];
+            }
+            for (auto i = pos-1; i < s-1 ; i++) {
+                temp[i] = arr[i+1];
+            }
+
+            s--;
+            delete []arr;
+            arr=temp;
+        }
+
+        void swap(vector& other) {
+            std::swap(arr, other.arr);      //Swaps the data pointers
+            std::swap(c, other.c);
+            std::swap(s, other.s);
+        }
+
+
+        // ---------------------------------------------------------------------------------------------------------------------------------------
+
+        // Iterators
+
+
 
 
 };
