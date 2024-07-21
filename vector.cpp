@@ -25,6 +25,85 @@ class vector{
             arr=temp;
 
         }
+        // ---------------------------------------------------------------------------------------------------------------------------------------
+
+        // Cutom helper methods
+
+        void merge(T* data, int l, int mid, int r) {
+            int n1 = mid - l + 1;
+            int n2 = r - mid;
+            T* leftArr = new T[n1];
+            T* rightArr = new T[n2];
+            for (int i = 0; i < n1; ++i)
+                leftArr[i] = data[l + i];
+            for (int j = 0; j < n2; ++j)
+                rightArr[j] = data[mid + 1 + j];
+            int i = 0, j = 0, k = l;
+            while (i < n1 && j < n2) {
+                if (leftArr[i] <= rightArr[j]) {
+                    data[k] = leftArr[i];
+                    i++;
+                } else {
+                    data[k] = rightArr[j];
+                    j++;
+                }
+                k++;
+            }
+            while (i < n1) {
+                data[k] = leftArr[i];
+                i++;
+                k++;
+            }
+            while (j < n2) {
+                data[k] = rightArr[j];
+                j++;
+                k++;
+            }
+            delete[] leftArr;
+            delete[] rightArr;
+        }
+
+        void mergeSort(T* data, int l, int r) {
+            if (l < r) {
+                int mid = l + (r - l) / 2;
+                mergeSort(data, l, mid);
+                mergeSort(data, mid + 1, r);
+                merge(data, l, mid, r);
+            }
+        }
+
+        int partition(T* data, int low, int high) {
+            T pivot = data[high];
+            int i = (low - 1);
+            for (int j = low; j <= high - 1; j++) {
+                if (data[j] < pivot) {
+                    i++;
+                    swap(data[i], data[j]);
+                }
+            }
+            swap(data[i + 1], data[high]);
+            return (i + 1);
+        }
+
+        void quickSort(T* data, int low, int high) {
+            if (low < high) {
+                int pi = partition(data, low, high);
+                quickSort(data, low, pi - 1);
+                quickSort(data, pi + 1, high);
+            }
+        }
+
+        void insertionSort(T* data, int start, int end) {
+            for (int i = start + 1; i <= end; ++i) {
+                T key = data[i];
+                int j = i - 1;
+                while (j >= start && data[j] > key) {
+                    data[j + 1] = data[j];
+                    --j;
+                }
+                data[j + 1] = key;
+            }
+        }
 
     public:
         // Constructors
@@ -273,7 +352,20 @@ class vector{
 
         // Custom Methods
 
-        
+        void sort(int start=0, int end=s-1) {
+            if (start < 0 || end >= s || start > end) {
+                throw out_of_range("Invalid start or end index.");
+            }
+
+            int size=end-start+1;
+            if (size < 20) {
+                insertionSort(data, start, end);
+            } else if (size < 10000) {
+                quickSort(data, start, end);
+            } else {
+                mergeSort(data, start, end);
+            }
+        }
 
 };
 
