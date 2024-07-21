@@ -7,7 +7,7 @@
 using namespace std;
 
 template <typename T>
-class vector{
+class MyVector{
     private:
         T* arr;
         size_t c;  //Capacity
@@ -27,35 +27,35 @@ class vector{
         }
         // ---------------------------------------------------------------------------------------------------------------------------------------
 
-        // Cutom helper methods
+        // Helper methods
 
-        void merge(T* data, int l, int mid, int r) {
+        void merge(T* arr, int l, int mid, int r) {
             int n1 = mid - l + 1;
             int n2 = r - mid;
             T* leftArr = new T[n1];
             T* rightArr = new T[n2];
             for (int i = 0; i < n1; ++i)
-                leftArr[i] = data[l + i];
+                leftArr[i] = arr[l + i];
             for (int j = 0; j < n2; ++j)
-                rightArr[j] = data[mid + 1 + j];
+                rightArr[j] = arr[mid + 1 + j];
             int i = 0, j = 0, k = l;
             while (i < n1 && j < n2) {
                 if (leftArr[i] <= rightArr[j]) {
-                    data[k] = leftArr[i];
+                    arr[k] = leftArr[i];
                     i++;
                 } else {
-                    data[k] = rightArr[j];
+                    arr[k] = rightArr[j];
                     j++;
                 }
                 k++;
             }
             while (i < n1) {
-                data[k] = leftArr[i];
+                arr[k] = leftArr[i];
                 i++;
                 k++;
             }
             while (j < n2) {
-                data[k] = rightArr[j];
+                arr[k] = rightArr[j];
                 j++;
                 k++;
             }
@@ -63,58 +63,58 @@ class vector{
             delete[] rightArr;
         }
 
-        void mergeSort(T* data, int l, int r) {
+        void mergeSort(T* arr, int l, int r) {
             if (l < r) {
                 int mid = l + (r - l) / 2;
-                mergeSort(data, l, mid);
-                mergeSort(data, mid + 1, r);
-                merge(data, l, mid, r);
+                mergeSort(arr, l, mid);
+                mergeSort(arr, mid + 1, r);
+                merge(arr, l, mid, r);
             }
         }
 
-        int partition(T* data, int low, int high) {
-            T pivot = data[high];
+        int partition(T* arr, int low, int high) {
+            T pivot = arr[high];
             int i = (low - 1);
             for (int j = low; j <= high - 1; j++) {
-                if (data[j] < pivot) {
+                if (arr[j] < pivot) {
                     i++;
-                    swap(data[i], data[j]);
+                    swap(arr[i], arr[j]);
                 }
             }
-            swap(data[i + 1], data[high]);
+            swap(arr[i + 1], arr[high]);
             return (i + 1);
         }
 
-        void quickSort(T* data, int low, int high) {
+        void quickSort(T* arr, int low, int high) {
             if (low < high) {
-                int pi = partition(data, low, high);
-                quickSort(data, low, pi - 1);
-                quickSort(data, pi + 1, high);
+                int pi = partition(arr, low, high);
+                quickSort(arr, low, pi - 1);
+                quickSort(arr, pi + 1, high);
             }
         }
 
-        void insertionSort(T* data, int start, int end) {
+        void insertionSort(T* arr, int start, int end) {
             for (int i = start + 1; i <= end; ++i) {
-                T key = data[i];
+                T key = arr[i];
                 int j = i - 1;
-                while (j >= start && data[j] > key) {
-                    data[j + 1] = data[j];
+                while (j >= start && arr[j] > key) {
+                    arr[j + 1] = arr[j];
                     --j;
                 }
-                data[j + 1] = key;
+                arr[j + 1] = key;
             }
         }
 
     public:
         // Constructors
 
-        vector() : arr(nullptr), s(0), c(0) {}
+        MyVector() : arr(nullptr), s(0), c(0) {}
 
-        vector(int n) : s(0), c(n) {
+        MyVector(int n) : s(0), c(n) {
             arr = new T[n];
         }
 
-        vector(int n, T val) : c(n), s(n) {
+        MyVector(int n, T val) : c(n), s(n) {
             arr = new T[n];
             for (int i = 0; i < n; ++i) {
                 arr[i] = val;
@@ -125,7 +125,7 @@ class vector{
 
         // Destructor
 
-        ~vector() {
+        ~MyVector() {
             delete[] arr;
         }
 
@@ -134,11 +134,11 @@ class vector{
 
         // Capacity methods
 
-        int size(){
+        size_t size(){
             return s;
         }
 
-        int capacity(){
+        size_t capacity(){
             return c;
         }
 
@@ -147,53 +147,58 @@ class vector{
         }
 
         void resize(size_t newSize){
-            c=newSize;
-            T* temp=new T[c];
-
-            if(c<s) s=c; 
-
-            for(auto i=0;i<s;i++){
-                temp[i]=arr[i];
+            if (newSize > c) {
+                T* temp = new T[newSize];
+                for (size_t i = 0; i < s; ++i) {
+                    temp[i] = arr[i];
+                }
+                delete[] arr;
+                arr = temp;
+                c = newSize;
             }
-
-            delete []arr;
-            arr=temp;
+            s = newSize;
         }
 
         void resize(size_t newSize, T val){         //Custom method
-            c=s=newSize;
-            T* temp=new T[c];
-
-            if(c<s) s=c; 
-
-            for(auto i=0;i<c;i++){
-                temp[i]=val;
+            if (newSize > c) {
+                T* temp = new T[newSize];
+                for (size_t i = 0; i < newSize; ++i) {
+                    temp[i] = val;
+                }
+                delete[] arr;
+                arr = temp;
+                c = newSize;
+            } 
+            else {
+                for (size_t i = s; i < newSize; ++i) {
+                    arr[i] = val;
+                }
             }
-
-            delete []arr;
-            arr=temp;
+            s = newSize;
         }
 
         void reserve(int num){
-            c=num;
-            s=0;
-            T* temp=new T[c];
-
-            delete []arr;
-            arr=temp;
+            if (num > c) {
+                T* temp = new T[num];
+                for (size_t i = 0; i < s; ++i) {
+                    temp[i] = arr[i];
+                }
+                delete[] arr;
+                arr = temp;
+                c = num;
+            }
         }
 
         void shrink_to_fit() {
             if (s < c) {
                 T* temp = new T[s];
-                c=s;
-
                 for (size_t i = 0; i < s; ++i) {
                     temp[i] = arr[i];
                 }
 
                 delete[] arr;
                 arr = temp;
+                c=s;
             }
         }
 
@@ -201,8 +206,15 @@ class vector{
 
         // Element Access
 
-        T operator[](int index){
+        T& operator[](int index){
             if(index>=s){
+                throw out_of_range("Index out of bound");
+            }
+            return arr[index];
+        }
+
+        const T& operator[](int index) const {
+            if (index >= static_cast<int>(s) || index < 0) {
                 throw out_of_range("Index out of bound");
             }
             return arr[index];
@@ -215,7 +227,21 @@ class vector{
             return arr[0];
         }
 
+        const T& front() const {
+            if (empty()) {
+                throw out_of_range("Vector is empty");
+            }
+            return arr[0];
+        }
+
         T& back() {
+            if (empty()) {
+                throw out_of_range("Vector is empty");
+            }
+            return arr[s - 1];
+        }
+
+        const T& back() const {
             if (empty()) {
                 throw out_of_range("Vector is empty");
             }
@@ -238,7 +264,7 @@ class vector{
 
         void pop_back(){
             if(s==0) {
-                throw out_of_range("Cannot pop from an empty vector");
+                throw out_of_range("Cannot pop from an empty MyVector");
                 return;
             }
             s--;
@@ -304,8 +330,8 @@ class vector{
             s=0;
         }
 
-        void swap(vector& other) {
-            std::swap(arr, other.arr);      //Swaps the data pointers
+        void swap(MyVector& other) {
+            std::swap(arr, other.arr);      //Swaps the arr pointers
             std::swap(c, other.c);
             std::swap(s, other.s);
         }
@@ -332,51 +358,108 @@ class vector{
         }
 
         std::reverse_iterator<T*> rbegin() {
-            return reverse_iterator<T*>(end());
+            return std::reverse_iterator<T*>(end());
         }
 
         std::reverse_iterator<T*> rend() {
-            return reverse_iterator<T*>(begin());
+            return std::reverse_iterator<T*>(begin());
         }
 
         std::reverse_iterator<const T*> crbegin() const {
-            return reverse_iterator<const T*>(cend());
+            return std::reverse_iterator<const T*>(cend());
         }
 
         std::reverse_iterator<const T*> crend() const {
-            return reverse_iterator<const T*>(cbegin());
+            return std::reverse_iterator<const T*>(cbegin());
         }
 
         // ---------------------------------------------------------------------------------------------------------------------------------------
 
         // Custom Methods
 
-        void sort(int start=0, int end=s-1) {
+        void sort(int start, int end) {
             if (start < 0 || end >= s || start > end) {
                 throw out_of_range("Invalid start or end index.");
             }
 
             int size=end-start+1;
             if (size < 20) {
-                insertionSort(data, start, end);
+                insertionSort(arr, start, end);
             } else if (size < 10000) {
-                quickSort(data, start, end);
+                quickSort(arr, start, end);
             } else {
-                mergeSort(data, start, end);
+                mergeSort(arr, start, end);
             }
         }
+
+        void sort(){                    // Overloading method with default parameters
+            sort(0, s-1);
+        }
+
+        int find(T ele){
+            for (int i = 0; i < s; ++i) {
+                if (arr[i] == ele) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        int findLast(T ele){
+            for (int i = s - 1; i >= 0; --i) {
+                if (arr[i] == ele) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        void reverse(int left, int right) {
+            while(left < right) {
+                std::swap(arr[left], arr[right]);
+                ++left;
+                --right;
+            }
+        }
+
+        void reverse(){                 // Overloading method with default parameters
+            reverse(0, s-1);
+        } 
+
+        void rotateLeft(int k){
+            if(s==0) return;
+
+            k=k%s;
+            if(k==0) return;
+
+            reverse(0, k-1);
+            reverse(k, s-1);
+            reverse();
+        }
+
+        void rotateRight(int k){
+            if(s==0) return;
+
+            k=k%s;
+            if(k==0) return;
+
+            reverse(s-k, s-1);
+            reverse(0, s-k-1);
+            reverse();
+        }
+
 
 };
 
 int main(){
-    vector<int> myvec(3);
+    MyVector<int> myvec(3);
     myvec.push_back(7);
     myvec.push_back(5);
     myvec.push_back(9);
     myvec.push_back(8);
     myvec.push_back(2);
     myvec.pop_back();
-    cout<<myvec[4]<<endl;
+    // cout<<myvec[4]<<endl;
     cout<<myvec.size()<<endl;
     cout<<myvec.capacity()<<endl;
     
