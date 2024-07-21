@@ -132,14 +132,14 @@ class vector{
 
         T& front() {
             if (empty()) {
-                throw std::out_of_range("Vector is empty");
+                throw out_of_range("Vector is empty");
             }
             return arr[0];
         }
 
         T& back() {
             if (empty()) {
-                throw std::out_of_range("Vector is empty");
+                throw out_of_range("Vector is empty");
             }
             return arr[s - 1];
         }
@@ -180,7 +180,7 @@ class vector{
 
         void insert(size_t pos, T& value) {
             if (pos > s) {
-                throw std::out_of_range("Position out of range");
+                throw out_of_range("Position out of range");
             }
             if (s == c) {
                 reserve(c + 10);
@@ -203,7 +203,7 @@ class vector{
 
         void erase(size_t pos) {
             if (pos >= s) {
-                throw std::out_of_range("Position out of range");
+                throw out_of_range("Position out of range");
             }
             
             T* temp = new T[s-1];
@@ -219,6 +219,13 @@ class vector{
             arr=temp;
         }
 
+        void clear(){
+            for(auto i=0;i<s;i++){      //Callling destructor on each element
+                arr[i].~T();
+            }
+            s=0;
+        }
+
         void swap(vector& other) {
             std::swap(arr, other.arr);      //Swaps the data pointers
             std::swap(c, other.c);
@@ -230,8 +237,43 @@ class vector{
 
         // Iterators
 
+        T* begin(){
+            return arr;
+        }
 
+        T* end(){
+            return arr+s;
+        }
 
+        const T* cbegin() const {
+            return arr;
+        }
+
+        const T* cend() const {
+            return arr + s;
+        }
+
+        std::reverse_iterator<T*> rbegin() {
+            return reverse_iterator<T*>(end());
+        }
+
+        std::reverse_iterator<T*> rend() {
+            return reverse_iterator<T*>(begin());
+        }
+
+        std::reverse_iterator<const T*> crbegin() const {
+            return reverse_iterator<const T*>(cend());
+        }
+
+        std::reverse_iterator<const T*> crend() const {
+            return reverse_iterator<const T*>(cbegin());
+        }
+
+        // ---------------------------------------------------------------------------------------------------------------------------------------
+
+        // Custom Methods
+
+        
 
 };
 
