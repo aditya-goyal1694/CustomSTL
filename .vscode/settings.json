@@ -1,5 +1,15 @@
 {
     "files.associations": {
-        "iostream": "cpp"
-    }
+        "*.tpp": "c",
+        "string_view": "c",
+        "streambuf": "c",
+        "array": "c",
+        "deque": "c",
+        "string": "c",
+        "unordered_map": "c",
+        "vector": "c",
+        "initializer_list": "c",
+        "myvector.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "enabled"
 }
