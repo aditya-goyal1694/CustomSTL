@@ -187,8 +187,7 @@ public:
         s = newSize;
     }
 
-    void resize(size_t newSize, T val)
-    { // Custom method
+    void resize(size_t newSize, T val){             // Custom method
         if (newSize > c)
         {
             T *temp = new T[newSize];
