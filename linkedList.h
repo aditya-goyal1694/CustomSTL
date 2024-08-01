@@ -114,14 +114,14 @@ class LinkedList{
         Node* getNodeAt(int pos) {
             if (pos < 0) throw out_of_range("Position cannot be negative");
 
-            Node* current = head;
+            Node* curr = head;
             int cnt = 0;
-            while (current != nullptr && cnt < pos) {
-                current = current->next;
+            while (curr != nullptr && cnt < pos) {
+                curr = curr->next;
                 cnt++;
             }
-            if (current == nullptr) throw out_of_range("Position out of bounds");
-            return current;
+            if (curr == nullptr) throw out_of_range("Position out of bounds");
+            return curr;
         }
         
         // Print the list
@@ -244,14 +244,14 @@ class LinkedList{
 
         void reverse() {
             Node* prev = nullptr;
-            Node* current = head;
+            Node* curr = head;
             Node* next = nullptr;
 
-            while (current) {
-                next = current->next;
-                current->next = prev;
-                prev = current;
-                current = next;
+            while (curr) {
+                next = curr->next;
+                curr->next = prev;
+                prev = curr;
+                curr = next;
             }
             head = prev;
         }
