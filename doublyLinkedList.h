@@ -20,17 +20,22 @@ private:
 
     // Merge two sorted lists
     Node* merge(Node* left, Node* right) {
-        if (!left) return right;
-        if (!right) return left;
+        if(!left) return right;
+        if(!right) return left;
         
-        if (left->val < right->val) {
+        if(left->val < right->val) {
             left->next = merge(left->next, right);
-            if (left->next) left->next->prev = left;
+
+            if(left->next) left->next->prev = left;
+
             left->prev = nullptr;
             return left;
-        } else {
+        }
+        else{
             right->next = merge(left, right->next);
-            if (right->next) right->next->prev = right;
+            
+            if(right->next) right->next->prev = right;
+            
             right->prev = nullptr;
             return right;
         }
@@ -51,11 +56,12 @@ private:
 
         *front = source;
         *back = slow->next;
+
         if (*back) (*back)->prev = nullptr;
         slow->next = nullptr;
     }
 
-    // Recursive merge sort function
+    
     Node* mergeSort(Node* head) {
         if (!head || !head->next) return head;
 
@@ -79,8 +85,8 @@ public:
     // ------------------------------------------------------------------------------------------------------
     // Destructor
 
-    ~doublyLinkedList() {
-        while (head) {
+    ~doublyLinkedList(){
+        while(head) {
             deleteHead();
         }
     }
@@ -89,12 +95,14 @@ public:
     // Accessing List
 
     void printList(){
-        Node* current = head;
-        while (current) {
-            std::cout << current->val << " ";
-            current = current->next;
+        Node* curr = head;
+        
+        while (curr) {
+            cout<<curr->val<<" ";
+            curr = curr->next;
         }
-        std::cout << std::endl;
+
+        cout<<endl;
     }
 
     // ------------------------------------------------------------------------------------------------------
@@ -103,9 +111,9 @@ public:
     // Insert element at the end
     void insert(T ele) {
         Node* newNode = new Node(ele);
-        if (!head) {
-            head = tail = newNode;
-        } else {
+
+        if(!head) head = tail = newNode;
+        else{
             tail->next = newNode;
             newNode->prev = tail;
             tail = newNode;
@@ -117,24 +125,33 @@ public:
         if (pos < 0) {
             throw std::out_of_range("Position cannot be negative.");
         }
+
         Node* newNode = new Node(ele);
         if (pos == 0) {
             newNode->next = head;
-            if (head) head->prev = newNode;
+            
+            if(head) head->prev = newNode;
             head = newNode;
-            if (!tail) tail = newNode;
-        } else {
-            Node* current = head;
-            for (int i = 0; i < pos - 1 && current; ++i) {
-                current = current->next;
+
+            if(!tail) tail = newNode;
+        }
+        else{
+            Node* curr = head;
+            
+            for (int i = 0; i < pos - 1 && curr; ++i) {
+                curr = curr->next;
             }
-            if (current) {
-                newNode->next = current->next;
-                newNode->prev = current;
-                if (current->next) current->next->prev = newNode;
-                current->next = newNode;
+            
+            if (curr) {
+                newNode->next = curr->next;
+                newNode->prev = curr;
+                
+                if (curr->next) curr->next->prev = newNode;
+                curr->next = newNode;
+                
                 if (!newNode->next) tail = newNode;
-            } else {
+            }
+            else {
                 delete newNode;
                 throw std::out_of_range("Position exceeds list length.");
             }
@@ -143,17 +160,18 @@ public:
 
     // Delete the first occurrence of an element
     void deleteNode(T ele) {
-        Node* current = head;
-        while (current) {
-            if (current->val == ele) {
-                if (current->prev) current->prev->next = current->next;
-                if (current->next) current->next->prev = current->prev;
-                if (current == head) head = current->next;
-                if (current == tail) tail = current->prev;
-                delete current;
+        Node* curr = head;
+        while (curr) {
+            if (curr->val == ele) {
+                if (curr->prev) curr->prev->next = curr->next;
+                if (curr->next) curr->next->prev = curr->prev;
+                if (curr == head) head = curr->next;
+                if (curr == tail) tail = curr->prev;
+                
+                delete curr;
                 return;
             }
-            current = current->next;
+            curr = curr->next;
         }
         throw std::runtime_error("Element not found.");
     }
@@ -163,6 +181,7 @@ public:
         if (!head) {
             throw std::runtime_error("Cannot delete from an empty list.");
         }
+
         Node* temp = head;
         head = head->next;
         if (head) head->prev = nullptr;
@@ -180,27 +199,27 @@ public:
     }
 
     bool find(T ele){
-        Node* current = head;
-        while (current) {
-            if (current->val == ele) {
+        Node* curr = head;
+        while (curr) {
+            if (curr->val == ele) {
                 return true;
             }
-            current = current->next;
+            curr = curr->next;
         }
         return false;
     }
 
     void reverse() {
         Node* temp = nullptr;
-        Node* current = head;
+        Node* curr = head;
         tail = head;
-        while (current) {
-            temp = current->prev;
-            current->prev = current->next;
-            current->next = temp;
-            current = current->prev;
+        while (curr) {
+            temp = curr->prev;
+            curr->prev = curr->next;
+            curr->next = temp;
+            curr = curr->prev;
         }
-        if (temp) {
+        if(temp){
             head = temp->prev;
         }
     }
@@ -210,10 +229,10 @@ public:
             throw std::out_of_range("Rotation count cannot be negative.");
         }
         int len = 0;
-        Node* current = head;
-        while (current) {
+        Node* curr = head;
+        while (curr) {
             ++len;
-            current = current->next;
+            curr = curr->next;
         }
         if (len == 0) return;
 
@@ -226,10 +245,10 @@ public:
         }
         Node* newHead = newTail->next;
         newTail->next = nullptr;
-        newHead->prev = nullptr;
+        if(newHead) newHead->prev = nullptr;
 
         tail->next = head;
-        head->prev = tail;
+        if(head) head->prev = tail;
         tail = newTail;
         head = newHead;
     }
@@ -239,10 +258,10 @@ public:
             throw std::out_of_range("Rotation count cannot be negative.");
         }
         int len = 0;
-        Node* current = head;
-        while (current) {
+        Node* curr = head;
+        while (curr) {
             ++len;
-            current = current->next;
+            curr = curr->next;
         }
         if (len == 0) return;
 
@@ -258,7 +277,7 @@ public:
         newHead->prev = nullptr;
 
         tail->next = head;
-        head->prev = tail;
+        if(head) head->prev = tail;
         tail = newTail;
         head = newHead;
     }
