@@ -16,6 +16,60 @@ private:
     Node* head;
     Node* tail;
 
+    // Helper Functions
+
+    // Merge two sorted lists
+    Node* merge(Node* left, Node* right) {
+        if (!left) return right;
+        if (!right) return left;
+        
+        if (left->val < right->val) {
+            left->next = merge(left->next, right);
+            if (left->next) left->next->prev = left;
+            left->prev = nullptr;
+            return left;
+        } else {
+            right->next = merge(left, right->next);
+            if (right->next) right->next->prev = right;
+            right->prev = nullptr;
+            return right;
+        }
+    }
+
+    // Helper function to split the list into two halves
+    void split(Node* source, Node** front, Node** back) {
+        Node* slow = source;
+        Node* fast = source->next;
+
+        while (fast) {
+            fast = fast->next;
+            if (fast) {
+                slow = slow->next;
+                fast = fast->next;
+            }
+        }
+
+        *front = source;
+        *back = slow->next;
+        if (*back) (*back)->prev = nullptr;
+        slow->next = nullptr;
+    }
+
+    // Recursive merge sort function
+    Node* mergeSort(Node* head) {
+        if (!head || !head->next) return head;
+
+        Node* front = nullptr;
+        Node* back = nullptr;
+
+        split(head, &front, &back);
+
+        front = mergeSort(front);
+        back = mergeSort(back);
+
+        return merge(front, back);
+    }
+
 public:
 
     // Constructor
@@ -114,6 +168,99 @@ public:
         if (head) head->prev = nullptr;
         else tail = nullptr;
         delete temp;
+    }
+
+    void sort() {
+        head = mergeSort(head);
+        
+        tail = head;                    // Update tail after sorting
+        while (tail && tail->next) {
+            tail = tail->next;
+        }
+    }
+
+    bool find(T ele){
+        Node* current = head;
+        while (current) {
+            if (current->val == ele) {
+                return true;
+            }
+            current = current->next;
+        }
+        return false;
+    }
+
+    void reverse() {
+        Node* temp = nullptr;
+        Node* current = head;
+        tail = head;
+        while (current) {
+            temp = current->prev;
+            current->prev = current->next;
+            current->next = temp;
+            current = current->prev;
+        }
+        if (temp) {
+            head = temp->prev;
+        }
+    }
+
+    void rotateLeft(int k) {
+        if (k < 0) {
+            throw std::out_of_range("Rotation count cannot be negative.");
+        }
+        int len = 0;
+        Node* current = head;
+        while (current) {
+            ++len;
+            current = current->next;
+        }
+        if (len == 0) return;
+
+        k %= len;
+        if (k == 0) return;
+
+        Node* newTail = head;
+        for (int i = 1; i < len - k; ++i) {
+            newTail = newTail->next;
+        }
+        Node* newHead = newTail->next;
+        newTail->next = nullptr;
+        newHead->prev = nullptr;
+
+        tail->next = head;
+        head->prev = tail;
+        tail = newTail;
+        head = newHead;
+    }
+
+    void rotateRight(int k) {
+        if (k < 0) {
+            throw std::out_of_range("Rotation count cannot be negative.");
+        }
+        int len = 0;
+        Node* current = head;
+        while (current) {
+            ++len;
+            current = current->next;
+        }
+        if (len == 0) return;
+
+        k %= len;
+        if (k == 0) return;
+
+        Node* newTail = head;
+        for (int i = 1; i < len - k; ++i) {
+            newTail = newTail->next;
+        }
+        Node* newHead = newTail->next;
+        newTail->next = nullptr;
+        newHead->prev = nullptr;
+
+        tail->next = head;
+        head->prev = tail;
+        tail = newTail;
+        head = newHead;
     }
 
 };
