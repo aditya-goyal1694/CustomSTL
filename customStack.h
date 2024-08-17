@@ -2,7 +2,6 @@
 #include <stdexcept>
 #include <algorithm>
 #include <limits>
-#include "customVector.h"
 using namespace std;
 
 template <typename T>
