@@ -127,7 +127,7 @@ private:
 public:
     // Constructors
 
-    customVector() : arr(nullptr), s(0), c(0) {}
+    customVector() : arr(new T[20]), s(0), c(20) {}
 
     customVector(int n) : s(0), c(n)
     {
