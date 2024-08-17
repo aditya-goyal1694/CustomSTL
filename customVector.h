@@ -383,7 +383,7 @@ public:
     void clear()
     {
         for (auto i = 0; i < s; i++)
-        { // Callling destructor on each element
+        { // Calling destructor on each element
             arr[i].~T();
         }
         s = 0;
