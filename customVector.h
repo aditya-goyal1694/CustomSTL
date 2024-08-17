@@ -7,7 +7,7 @@
 using namespace std;  
 
 template <typename T>
-class MyVector
+class customVector
 {
 private:
     T *arr;
@@ -127,14 +127,14 @@ private:
 public:
     // Constructors
 
-    MyVector() : arr(nullptr), s(0), c(0) {}
+    customVector() : arr(nullptr), s(0), c(0) {}
 
-    MyVector(int n) : s(0), c(n)
+    customVector(int n) : s(0), c(n)
     {
         arr = new T[n];
     }
 
-    MyVector(int n, T val) : c(n), s(n)
+    customVector(int n, T val) : c(n), s(n)
     {
         arr = new T[n];
         for (int i = 0; i < n; ++i)
@@ -147,7 +147,7 @@ public:
 
     // Destructor
 
-    ~MyVector()
+    ~customVector()
     {
         delete[] arr;
     }
@@ -317,7 +317,7 @@ public:
     {
         if (s == 0)
         {
-            throw out_of_range("Cannot pop from an empty MyVector");
+            throw out_of_range("Cannot pop from an empty customVector");
             return;
         }
         s--;
@@ -389,7 +389,7 @@ public:
         s = 0;
     }
 
-    void swap(MyVector &other)
+    void swap(customVector &other)
     {
         std::swap(arr, other.arr); // Swaps the arr pointers
         std::swap(c, other.c);
