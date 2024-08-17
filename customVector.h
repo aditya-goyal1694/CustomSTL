@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <memory>
 #include <limits>
-using namespace std;
+using namespace std;  
 
 template <typename T>
 class MyVector
@@ -349,20 +349,13 @@ public:
             reserve(c + 10);
         }
 
-        T *temp = new T[s + 1];
-        for (auto i = 0; i < pos - 1; i++)
-        {
-            temp[i] = arr[i];
+        int i=n-1;
+        while(i>=pos-1){
+            arr[i+1]=arr[i];
+            i--;
         }
-        arr[pos - 1] = value;
-        for (auto i = pos; i < s; i++)
-        {
-            temp[i] = arr[i - 1];
-        }
-
+        arr[pos-1]=val;
         s++;
-        delete[] arr;
-        arr = temp;
     }
 
     void erase(size_t pos)
