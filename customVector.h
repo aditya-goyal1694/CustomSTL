@@ -16,7 +16,7 @@ private:
 
     void new_allocation()
     {
-        c = c + 10;
+        c = c + 20;
         T *temp = new T[c];
 
         for (auto i = 0; i < s; i++)
