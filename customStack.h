@@ -117,4 +117,13 @@ public:
         return minElement;
     }
 
+    void clear()
+    {
+        for (auto i = 0; i < s; i++)
+        { // Calling destructor on each element
+            st[i].~T();
+        }
+        s = 0;
+    }
+
 };
