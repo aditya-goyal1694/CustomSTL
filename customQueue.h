@@ -34,7 +34,7 @@ private:
 public:
     // Constructor
 
-    customQueue() : q(new T[20]), s(0), c(20), frontInd(-1), isEmpty(true), maxElement(NULL), minElement(NULL) {}
+    customQueue() : q(new T[20]), s(0), c(20), frontInd(0), isEmpty(true), maxElement(NULL), minElement(NULL) {}
 
     // Destructor
 
@@ -79,6 +79,7 @@ public:
         if(frontInd==s){
             isEmpty=true;
             s=0;
+            frontInd=0;
         }
     }
 
@@ -124,6 +125,8 @@ public:
             q[i].~T();
         }
         s = 0;
+        maxElement=NULL;
+        minElement=NULL;
     }
 
 };
