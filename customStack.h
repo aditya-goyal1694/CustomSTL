@@ -98,7 +98,7 @@ public:
         }
 
         if(maxElement==NULL){
-            for(T& i : st) maxElement=(i>=maxElement)?i:maxElement;
+            for(int i=0;i<topIndex;i++) maxElement=(st[i]>=maxElement)?st[i]:maxElement;
         }
 
         return maxElement;
@@ -110,7 +110,7 @@ public:
         }
 
         if(minElement==NULL){
-            for(T& i : st) minElement=(i<=minElement)?i:minElement;
+            for(int i=0;i<topIndex;i++) minElement=(st[i]>=minElement)?st[i]:minElement;
         }
 
         return minElement;
