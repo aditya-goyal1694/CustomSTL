@@ -123,6 +123,8 @@ public:
             st[i].~T();
         }
         s = 0;
+        maxElement=NULL;
+        minElement=NULL;
     }
 
 };
