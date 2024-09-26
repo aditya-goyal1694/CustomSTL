@@ -34,7 +34,7 @@ private:
 public:
     // Constructor
 
-    customQueue() : q(new T[20]), s(0), c(20), frontInd(0), isEmpty(true), maxElement(NULL), minElement(NULL) {}
+    customQueue() : q(new T[20]), s(0), c(20), frontInd(0), isEmpty(true), maxElement(std::numeric_limits<T>::min()), minElement(std::numeric_limits<T>::max()) {}
 
     // Destructor
 
@@ -48,12 +48,12 @@ public:
     void push(T& ele) {
 
         if(isEmpty) maxElement=ele;
-        else if(maxElement!=NULL){
+        else if(maxElement!=std::numeric_limits<T>::min()){
             maxElement=(ele>=maxElement)?ele:maxElement;
         }
         
         if(isEmpty) minElement=ele;
-        else if(minElement!=NULL){
+        else if(minElement!=std::numeric_limits<T>::max()){
             minElement=(ele<=minElement)?ele:minElement;
         }
 
@@ -69,11 +69,11 @@ public:
 
     void pop() {
         if(isEmpty) {
-            throw std::underflow_error("Cannot pop. Queue is empty.");
+            throw std::runtime_error("Cannot pop. Queue is empty.");
         }
 
-        if(maxElement==q[frontInd]) maxElement=NULL;
-        if(minElement==q[frontInd]) minElement=NULL;
+        if(maxElement==q[frontInd]) maxElement=std::numeric_limits<T>::min();
+        if(minElement==q[frontInd]) minElement=std::numeric_limits<T>::max();
 
         frontInd++;
         if(frontInd==s){
@@ -85,7 +85,7 @@ public:
 
     T front(){
         if(isEmpty) {
-            throw std::underflow_error("Queue is empty");
+            throw std::runtime_error("Queue is empty");
         }
         return q[frontInd];
     }
@@ -96,7 +96,7 @@ public:
 
     T maxele(){
         if(isEmpty) {
-            throw std::underflow_error("Queue is empty");
+            throw std::runtime_error("Queue is empty");
         }
 
         if(maxElement==NULL){
@@ -108,7 +108,7 @@ public:
 
     T minele(){
         if (isEmpty) {
-            throw std::underflow_error("Queue is empty");
+            throw std::runtime_error("Queue is empty");
         }
 
         if(minElement==NULL){
@@ -124,9 +124,12 @@ public:
         { // Calling destructor on each element
             q[i].~T();
         }
+
         s = 0;
-        maxElement=NULL;
-        minElement=NULL;
+        frontInd = 0;
+        
+        maxElement=std::numeric_limits<T>::min();
+        minElement=std::numeric_limits<T>::max();
     }
 
 };
