@@ -60,7 +60,7 @@ private:
 
 public:
     // Constructor
-    MinHeap(int cap) : c(cap), s(0) {
+    MinHeap(int cap = 20) : c(cap), s(0) {
         heap = new T[c];
     }
 
