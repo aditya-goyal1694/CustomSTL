@@ -1,125 +1,167 @@
 #include <iostream>
 #include <stdexcept>
+#include "customQueue.h"
+using namespace std;
 
 template<typename T>
 class BinarySearchTree {
 private:
-    T* tree;
-    int c;      // capacity
-    int s;      // size
+    struct Node {
+        T data;
+        Node* left;
+        Node* right;
 
-    void resizeTree() {
-        c += 20;
-        T* newTree = new T[c];
-        for (int i = 0; i < s; ++i) {
-            newTree[i] = tree[i];
-        }
-        delete[] tree;
-        tree = newTree;
-    }
+        Node(T val) : data(val), left(nullptr), right(nullptr) {}
+    };
+
+    Node* root;
+    int s;  // Size of the tree
 
     // Recursive helper functions
-    void insert(int index, T element) {
-        if (index >= c) {
-            throw runtime_error("Index exceeds c.");
+    Node* insert(Node* node, T element) {
+        if (node == nullptr) {
+            return new Node(element);
         }
 
-        if (tree[index] == T()) {  // If the position is empty
-            tree[index] = element;
-            return;
-        }
-
-        if (element < tree[index]) {
-            insert(2 * index + 1, element);  // Left child
+        if (element < node->data) {
+            node->left = insert(node->left, element);
         } else {
-            insert(2 * index + 2, element);  // Right child
+            node->right = insert(node->right, element);
         }
+        return node;
     }
 
-    bool search(int index, T element) {
-        if (index >= s || tree[index] == T()) {
+    bool search(Node* node, T element) {
+        if (node == nullptr) {
             return false;
         }
 
-        if (tree[index] == element) {
+        if (node->data == element) {
             return true;
-        } else if (element < tree[index]) {
-            return search(2 * index + 1, element);
+        } else if (element < node->data) {
+            return search(node->left, element);
         } else {
-            return search(2 * index + 2, element);
+            return search(node->right, element);
         }
     }
 
-    void deleteElement(int index, T element) {
-        if (index >= s || tree[index] == T()) {
+    Node* deleteElement(Node* node, T element) {
+        if (node == nullptr) {
             throw runtime_error("Element not found.");
         }
 
-        if (tree[index] == element) {
-            tree[index] = T();          // Setting to default value
+        if (element < node->data) {
+            node->left = deleteElement(node->left, element);
+        } else if (element > node->data) {
+            node->right = deleteElement(node->right, element);
+        } else {
+            // Node found, delete it
+            if (node->left == nullptr && node->right == nullptr) {
+                delete node;
+                return nullptr;
+            } else if (node->left == nullptr) {
+                Node* temp = node->right;
+                delete node;
+                return temp;
+            } else if (node->right == nullptr) {
+                Node* temp = node->left;
+                delete node;
+                return temp;
+            } else {
+                // Node has two children, find inorder successor
+                Node* successor = findMin(node->right);
+                node->data = successor->data;
+                node->right = deleteElement(node->right, successor->data);
+            }
+        }
+        return node;
+    }
+
+    Node* findMin(Node* node) {
+        while (node->left != nullptr) {
+            node = node->left;
+        }
+        return node;
+    }
+
+    void inorderTraversal(Node* node) {
+        if (node == nullptr) return;
+        inorderTraversal(node->left);
+        cout << node->data << " ";
+        inorderTraversal(node->right);
+    }
+
+    void preorderTraversal(Node* node) {
+        if (node == nullptr) return;
+        cout << node->data << " ";
+        preorderTraversal(node->left);
+        preorderTraversal(node->right);
+    }
+
+    void postorderTraversal(Node* node) {
+        if (node == nullptr) return;
+        postorderTraversal(node->left);
+        postorderTraversal(node->right);
+        cout << node->data << " ";
+    }
+
+    void levelOrderTraversal() {
+        if (root == nullptr) {
+            cout << "Tree is empty." << endl;
             return;
         }
 
-        if (element < tree[index]) {
-            deleteElement(2 * index + 1, element);
-        } else {
-            deleteElement(2 * index + 2, element);
+        customQueue<Node*> q;
+        q.push(root);
+
+        while (!q.empty()) {
+            Node* current = q.front();
+            q.pop();
+            if (current) {
+                cout << current->data << " ";
+                if (current->left) q.push(current->left);
+                if (current->right) q.push(current->right);
+            } else {
+                cout << "X ";  // 'X' represents an invalid node
+            }
         }
+        cout << endl;
     }
 
-    void inorderTraversal(int index) {
-        if (index >= s || tree[index] == T()) return;
-        inorderTraversal(2 * index + 1);
-        cout << tree[index] << " ";
-        inorderTraversal(2 * index + 2);
-    }
-
-    void preorderTraversal(int index) {
-        if (index >= s || tree[index] == T()) return;
-        cout << tree[index] << " ";
-        preorderTraversal(2 * index + 1);
-        preorderTraversal(2 * index + 2);
-    }
-
-    void postorderTraversal(int index) {
-        if (index >= s || tree[index] == T()) return;
-        postorderTraversal(2 * index + 1);
-        postorderTraversal(2 * index + 2);
-        cout << tree[index] << " ";
-    }
-
-    void dfsTraversal(int index) {
-        if (index >= s || tree[index] == T()) return;
-        cout << tree[index] << " ";
-        dfsTraversal(2 * index + 1);
-        dfsTraversal(2 * index + 2);
+    void dfsTraversal(Node* node) {
+        if (node == nullptr) return;
+        cout << node->data << " ";
+        dfsTraversal(node->left);
+        dfsTraversal(node->right);
     }
 
 public:
     // Constructor
-    BinarySearchTree(int cap = 20) : c(cap), s(0) {
-        tree = new T[c]();
-    }
+    BinarySearchTree() : root(nullptr), s(0) {}
 
     // Destructor
     ~BinarySearchTree() {
-        delete[] tree;
+        clear(root);
+    }
+
+    void clear(Node* node) {
+        if (node == nullptr) return;
+        clear(node->left);
+        clear(node->right);
+        delete node;
     }
 
     void insert(T element) {
-        if (s == c) {
-            resizeTree();
-        }
-        insert(0, element);
+        root = insert(root, element);
         s++;
     }
 
     bool search(T element) {
-        return search(0, element);
+        return search(root, element);
     }
 
     void remove(T element) {
-        deleteElement(0, element);
+        root = deleteElement(root, element);
         s--;
     }
 
@@ -128,17 +170,29 @@ public:
     }
 
     void inorder() {
-        inorderTraversal(0);
+        if (isEmpty()) {
+            cout << "Tree is empty." << endl;
+            return;
+        }
+        inorderTraversal(root);
         cout << endl;
     }
 
     void preorder() {
-        preorderTraversal(0);
+        if (isEmpty()) {
+            cout << "Tree is empty." << endl;
+            return;
+        }
+        preorderTraversal(root);
         cout << endl;
     }
 
     void postorder() {
-        postorderTraversal(0);
+        if (isEmpty()) {
+            cout << "Tree is empty." << endl;
+            return;
+        }
+        postorderTraversal(root);
         cout << endl;
     }
 
@@ -147,24 +201,10 @@ public:
             cout << "Tree is empty." << endl;
             return;
         }
-
-        T invalid = T(); // Default-initialized value
-        
-        for (int i = 0; i < s; ++i) {
-            if (tree[i] != invalid) {
-                cout << tree[i] << " ";
-            } else {
-                cout << "X ";  // 'X' represents an invalid node
-            }
-        }
-        cout << endl;
+        levelOrderTraversal();
     }
 
     void bfs() {
-        if (isEmpty()) {
-            cout << "Tree is empty." << endl;
-            return;
-        }
         levelOrder();
     }
 
@@ -173,7 +213,7 @@ public:
             cout << "Tree is empty." << endl;
             return;
         }
-        dfsTraversal(0);
+        dfsTraversal(root);
         cout << endl;
     }
 };
