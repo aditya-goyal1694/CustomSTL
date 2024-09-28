@@ -4,7 +4,7 @@
 using namespace std;
 
 template<typename T>
-class MinHeap {
+class MaxHeap{
 private:
     T* heap;
     int c;      // capacity
@@ -28,31 +28,31 @@ private:
 
     // For deleting the root
     void heapifyDown(int ind) {
-        int mini = ind;
+        int maxi = ind;
         int left = 2 * ind + 1;
         int right = 2 * ind + 2;
 
         // Compare with left child
-        if (left < s && heap[left] < heap[mini]) {
-            mini = left;
+        if (left < s && heap[left] > heap[maxi]) {
+            maxi = left;
         }
 
         // Compare with right child
-        if (right < s && heap[right] < heap[mini]) {
-            mini = right;
+        if (right < s && heap[right] > heap[maxi]) {
+            maxi = right;
         }
 
-        // If mini is not root, swap and continue heapifying
-        if (mini != ind) {
-            swap(heap[ind], heap[mini]);
-            heapifyDown(mini);
+        // If maxi is not root, swap and continue heapifying
+        if (maxi != ind) {
+            swap(heap[ind], heap[maxi]);
+            heapifyDown(maxi);
         }
     }
 
     // For inserting a new element
     void heapifyUp(int ind) {
         int parent = (ind - 1) / 2;
-        if (ind > 0 && heap[ind] < heap[parent]) {
+        if (ind > 0 && heap[ind] > heap[parent]) {
             swap(heap[ind], heap[parent]);
             heapifyUp(parent);
         }
@@ -60,17 +60,17 @@ private:
 
 public:
     // Constructor
-    MinHeap(int cap = 20) : c(cap), s(0) {
+    MaxHeap(int cap = 20) : c(cap), s(0) {
         heap = new T[c];
     }
 
     // Destructor
-    ~MinHeap() {
+    ~MaxHeap() {
         delete[] heap;
     }
 
     void insert(T element) {
-        if (s == c) {
+        if(s == c) {
             resizeHeap();
         }
 
@@ -79,25 +79,26 @@ public:
         s++;
     }
 
-    T extractMin() {
+    T extractMax() {
         if (s <= 0) {
             throw std::runtime_error("Heap is empty.");
         }
-        T minElement = heap[0];
+        T maxElement = heap[0];
         heap[0] = heap[s - 1];
         s--;
         heapifyDown(0);
-        return minElement;
+        return maxElement;
     }
 
-    T getMin() {
+    T getMax(){
         if (s <= 0) {
             throw std::runtime_error("Heap is empty.");
         }
         return heap[0];
     }
 
-    int getsize() {
+    
+    int getsize(){
         return s;
     }
 };
