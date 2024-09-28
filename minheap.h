@@ -1,103 +1,158 @@
 #include <iostream>
 #include <stdexcept>
-#include <limits>
 using namespace std;
 
 template<typename T>
 class MinHeap {
 private:
-    T* heap;
-    int c;      // capacity
-    int s;      // size
+    struct Node {
+        T data;
+        Node* left;
+        Node* right;
+        Node* parent;
 
-    void swap(T& a, T& b) {
-        T temp = a;
-        a = b;
-        b = temp;
+        Node(T val) : data(val), left(nullptr), right(nullptr), parent(nullptr) {}
+    };
+
+    Node* root;
+    int s;          // size
+
+    void swap(Node* a, Node* b) {
+        T temp = a->data;
+        a->data = b->data;
+        b->data = temp;
     }
 
-    void resizeHeap() {
-        c += 20;
-        T* newHeap = new T[c];
-        for (int i = 0; i < s; ++i) {
-            newHeap[i] = heap[i];
-        }
-        delete[] heap;
-        heap = newHeap;
-    }
+    // For deletion
+    void heapifyDown(Node* node) {
+        if (!node) return;
 
-    // For deleting the root
-    void heapifyDown(int ind) {
-        int mini = ind;
-        int left = 2 * ind + 1;
-        int right = 2 * ind + 2;
+        Node* smallest = node;
 
-        // Compare with left child
-        if (left < s && heap[left] < heap[mini]) {
-            mini = left;
+        if (node->left && node->left->data < smallest->data) {
+            smallest = node->left;
         }
 
-        // Compare with right child
-        if (right < s && heap[right] < heap[mini]) {
-            mini = right;
+        if (node->right && node->right->data < smallest->data) {
+            smallest = node->right;
         }
 
-        // If mini is not root, swap and continue heapifying
-        if (mini != ind) {
-            swap(heap[ind], heap[mini]);
-            heapifyDown(mini);
+        if (smallest != node) {
+            swap(node, smallest);
+            heapifyDown(smallest);
         }
     }
 
-    // For inserting a new element
-    void heapifyUp(int ind) {
-        int parent = (ind - 1) / 2;
-        if (ind > 0 && heap[ind] < heap[parent]) {
-            swap(heap[ind], heap[parent]);
-            heapifyUp(parent);
+    // For insertion
+    void heapifyUp(Node* node) {
+        if (!node || !node->parent) return;
+
+        if (node->data < node->parent->data) {
+            swap(node, node->parent);
+            heapifyUp(node->parent);
         }
+    }
+
+    Node* insertNode(Node* node, T element) {
+        if (!node) {
+            return new Node(element);
+        }
+
+        // Level order insertion
+        if (!node->left) {
+            node->left = new Node(element);
+            node->left->parent = node;
+            return node->left;
+        } else if (!node->right) {
+            node->right = new Node(element);
+            node->right->parent = node;
+            return node->right;
+        }
+
+        // If both children are present, we go deeper in the tree
+        Node* leftResult = insertNode(node->left, element);
+        if (leftResult) return leftResult;
+
+        return insertNode(node->right, element);
+    }
+
+    Node* findLast(Node* node) {
+        if (!node) return nullptr;
+
+        // Level order traversal
+        Node* lastNode = nullptr;
+        Node* temp = node;
+
+        while (temp) {
+            lastNode = temp;
+            if (temp->left) temp = temp->left;
+            else if (temp->right) temp = temp->right;
+            else break;
+        }
+
+        return lastNode;
     }
 
 public:
     // Constructor
-    MinHeap(int cap = 20) : c(cap), s(0) {
-        heap = new T[c];
-    }
+    MinHeap() : root(nullptr), s(0) {}
 
     // Destructor
     ~MinHeap() {
-        delete[] heap;
+        while (!isEmpty()) {
+            extractMin();
+        }
     }
 
     void insert(T element) {
-        if (s == c) {
-            resizeHeap();
+        Node* newNode = insertNode(root, element);
+        if (!root) {
+            root = newNode;
         }
-
-        heap[s] = element;
-        heapifyUp(s);
-        s++;
+        heapifyUp(newNode);
+        size++;
     }
 
     T extractMin() {
-        if (s <= 0) {
+        if (isEmpty()) {
             throw std::runtime_error("Heap is empty.");
         }
-        T minElement = heap[0];
-        heap[0] = heap[s - 1];
-        s--;
-        heapifyDown(0);
+
+        T minElement = root->data;
+
+        Node* lastNode = findLast(root);
+        if (lastNode == root) {
+            delete root;
+            root = nullptr;
+        } else {
+            root->data = lastNode->data; // Move last node to root
+            if (lastNode->parent) {
+                if (lastNode->parent->left == lastNode) {
+                    lastNode->parent->left = nullptr;
+                } else {
+                    lastNode->parent->right = nullptr;
+                }
+            }
+            delete lastNode;
+            heapifyDown(root);
+        }
+
+        size--;
         return minElement;
     }
 
     T getMin() {
-        if (s <= 0) {
-            throw std::runtime_error("Heap is empty.");
+        if (isEmpty()) {
+            throw runtime_error("Heap is empty.");
         }
-        return heap[0];
+        return root->data;
     }
 
-    int getsize() {
+    bool isEmpty() const {
+        return s == 0;
+    }
+
+    int getSize() const {
         return s;
     }
 };
