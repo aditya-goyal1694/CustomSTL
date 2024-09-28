@@ -169,6 +169,11 @@ public:
         return s == 0;
     }
 
+    int getHeight(Node* node) {
+        if (node == nullptr) return 0;
+        return 1 + max(getHeight(node->left), getHeight(node->right));
+    }
+
     void inorder() {
         if (isEmpty()) {
             cout << "Tree is empty." << endl;
