@@ -5,113 +5,151 @@ using namespace std;
 template<typename T>
 class BinaryTree {
 private:
-    T* tree;
-    int c;     // Capacity
-    int s;     // Size
+    struct Node {
+        T data;
+        Node* left;
+        Node* right;
 
-    void resizeTree() {
-        c += 20;
-        T* newTree = new T[c];
-        for (int i = 0; i < s; ++i) {
-            newTree[i] = tree[i];
+        Node(T val) : data(val), left(nullptr), right(nullptr) {}
+    };
+
+    Node* root;
+    int s;  // size
+
+    // Recursive helper functions
+
+    void preorderTraversal(Node* node) {
+        if (node == nullptr) return;
+        cout << node->data << " ";
+        preorderTraversal(node->left);
+        preorderTraversal(node->right);
+    }
+
+    void inorderTraversal(Node* node) {
+        if (node == nullptr) return;
+        inorderTraversal(node->left);
+        cout << node->data << " ";
+        inorderTraversal(node->right);
+    }
+
+    void postorderTraversal(Node* node) {
+        if (node == nullptr) return;
+        postorderTraversal(node->left);
+        postorderTraversal(node->right);
+        cout << node->data << " ";
+    }
+
+    void dfsHelper(Node* node) {
+        if (node == nullptr) return;
+        cout << node->data << " ";
+        dfsHelper(node->left);
+        dfsHelper(node->right);
+    }
+
+    void levelOrderTraversal(Node* node) {
+        if (node == nullptr) return;
+        int height = getHeight(node);
+        for (int i = 1; i <= height; i++) {
+            printLevel(node, i);
         }
-        delete[] tree;
-        tree = newTree;
     }
 
-    // Recursive functions for tree traversals
-    void preorderTraversal(int index) {
-        if (index >= s) return;
-        cout << tree[index] << " ";
-        preorderTraversal(2 * index + 1);
-        preorderTraversal(2 * index + 2);
+    void printLevel(Node* node, int level) {
+        if (node == nullptr) return;
+        if (level == 1) {
+            cout << node->data << " ";
+        } else if (level > 1) {
+            printLevel(node->left, level - 1);
+            printLevel(node->right, level - 1);
+        }
     }
 
-    void inorderTraversal(int index) {
-        if (index >= s) return;
-        inorderTraversal(2 * index + 1);
-        cout << tree[index] << " ";
-        inorderTraversal(2 * index + 2);
+    Node* insertLevelOrder(Node* node, T element) {
+        if (node == nullptr) {
+            return new Node(element);
+        }
+
+        if (node->left == nullptr) {
+            node->left = insertLevelOrder(node->left, element);
+        } else if (node->right == nullptr) {
+            node->right = insertLevelOrder(node->right, element);
+        } else {
+            if (getHeight(node->left) <= getHeight(node->right)) {
+                insertLevelOrder(node->left, element);
+            } else {
+                insertLevelOrder(node->right, element);
+            }
+        }
+        return node;
     }
 
-    void postorderTraversal(int index) {
-        if (index >= s) return;
-        postorderTraversal(2 * index + 1);
-        postorderTraversal(2 * index + 2);
-        cout << tree[index] << " ";
+    Node* findElement(Node* node, T element) {
+        if (node == nullptr || node->data == element) return node;
+
+        Node* leftResult = findElement(node->left, element);
+        if (leftResult != nullptr) return leftResult;
+
+        return findElement(node->right, element);
     }
 
-    void dfsTraversal(int index) {
-        if (index >= s) return;
-        cout << tree[index] << " ";
-        dfsTraversal(2 * index + 1);
-        dfsTraversal(2 * index + 2);
+    Node* findAndDelete(Node* node, T element) {
+        if (node == nullptr) return nullptr;
+
+        if (node->data == element) {
+            delete node;
+            return nullptr;
+        }
+
+        node->left = findAndDelete(node->left, element);
+        node->right = findAndDelete(node->right, element);
+
+        return node;
+    }
+
+    Node* findParent(Node* node, Node* child) {
+        if (node == nullptr || node->left == child || node->right == child) {
+            return node;
+        }
+
+        Node* leftSearch = findParent(node->left, child);
+        if (leftSearch != nullptr) return leftSearch;
+
+        return findParent(node->right, child);
     }
 
 public:
     // Constructor
-    BinaryTree(int cap = 20) : c(cap), s(0) {
-        tree = new T[c];
-    }
+    BinaryTree() : root(nullptr), s(0) {}
 
     // Destructor
     ~BinaryTree() {
-        delete[] tree;
+        clearTree(root);
+    }
+
+    int getHeight(Node* node) {
+        if (node == nullptr) return 0;
+        return 1 + max(getHeight(node->left), getHeight(node->right));
+    }
+
+    void clearTree(Node* node) {
+        if (node == nullptr) return;
+        clearTree(node->left);
+        clearTree(node->right);
+        delete node;
     }
 
     // Level order insertion
     void insert(T element) {
-        if (s == c) {
-            resizeTree();
-        }
-        tree[s] = element;
+        root = insertLevelOrder(root, element);
         s++;
     }
 
     void modify(T oldVal, T newVal) {
-        bool found = false;
-        for (int i = 0; i < s; ++i) {
-            if (tree[i] == oldVal) {
-                tree[i] = newVal;
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
+        Node* node = findElement(root, oldVal);
+        if (node == nullptr) {
             throw std::runtime_error("Value to modify not found.");
         }
-    }
-
-    int getParent(int ind) {
-        if (ind <= 0 || ind >= s) {
-            throw std::runtime_error("Index out of bounds or no parent.");
-        }
-        return (ind - 1) / 2;
-    }
-
-    // Get left child index of a node
-    int getLeft(int ind) {
-        int left = 2 * ind + 1;
-        if (left >= s) {
-            throw std::runtime_error("No left child.");
-        }
-        return left;
-    }
-
-    // Get right child index of a node
-    int getRight(int ind) {
-        int right = 2 * ind + 2;
-        if (right >= s) {
-            throw std::runtime_error("No right child.");
-        }
-        return right;
-    }
-
-    T getElementAt(int index) {
-        if (index < 0 || index >= s) {
-            throw std::runtime_error("Index out of bounds.");
-        }
-        return tree[index];
+        node->data = newVal;
     }
 
     int getSize() {
@@ -123,27 +161,32 @@ public:
     }
 
     bool find(T element) {
-        for (int i = 0; i < s; ++i) {
-            if (tree[i] == element) {
-                return true;
-            }
-        }
-        return false;
+        return findElement(root, element) != nullptr;
     }
 
-    // Need to fix
     void deleteElement(T element) {
         if (isEmpty()) {
             throw std::runtime_error("Tree is empty.");
         }
-        for (int i = 0; i < s; ++i) {
-            if (tree[i] == element) {
-                tree[i] = tree[s - 1];  // Replace with the last element
-                s--;  // Decrease the size
-                return;
-            }
+        if (!find(element)) {
+            throw std::runtime_error("Element not found.");
         }
-        throw std::runtime_error("Element not found.");
+        root = findAndDelete(root, element);
+        s--;
+    }
+
+    T getParent(T element) {
+        Node* target = findElement(root, element);
+        if (target == nullptr || target == root) {
+            throw std::runtime_error("No parent found or element is root.");
+        }
+
+        Node* parent = findParent(root, target);
+        if (parent == nullptr) {
+            throw std::runtime_error("Parent not found.");
+        }
+
+        return parent->data;
     }
 
     void preorder() {
@@ -151,7 +194,7 @@ public:
             cout << "Tree is empty." << endl;
             return;
         }
-        preorderTraversal(0);
+        preorderTraversal(root);
         cout << endl;
     }
 
@@ -160,7 +203,7 @@ public:
             cout << "Tree is empty." << endl;
             return;
         }
-        inorderTraversal(0);
+        inorderTraversal(root);
         cout << endl;
     }
 
@@ -169,7 +212,7 @@ public:
             cout << "Tree is empty." << endl;
             return;
         }
-        postorderTraversal(0);
+        postorderTraversal(root);
         cout << endl;
     }
 
@@ -178,27 +221,20 @@ public:
             cout << "Tree is empty." << endl;
             return;
         }
-
-        for (int i = 0; i < s; ++i) {
-            cout << tree[i] << " ";
-        }
+        levelOrderTraversal(root);
         cout << endl;
     }
 
     void bfs() {
-        if (isEmpty()) {
-            cout << "Tree is empty." << endl;
-            return;
-        }
         levelOrder();
     }
 
     void dfs() {
-        if (isEmpty()) {
+        if (root == nullptr) {
             cout << "Tree is empty." << endl;
             return;
         }
-        dfsTraversal(0);
+        dfsHelper(root);
         cout << endl;
     }
 };
