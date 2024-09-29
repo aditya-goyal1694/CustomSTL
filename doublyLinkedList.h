@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdexcept>
+using namespace std;
 
 template <typename T>
 class doublyLinkedList {
@@ -43,22 +44,25 @@ private:
 
     // Helper function to split the list into two halves
     void split(Node* source, Node** front, Node** back) {
+        if (!source) {
+            *front = nullptr;
+            *back = nullptr;
+            return;
+        }
+
         Node* slow = source;
         Node* fast = source->next;
 
-        while (fast) {
-            fast = fast->next;
-            if (fast) {
-                slow = slow->next;
-                fast = fast->next;
-            }
+        while (fast && fast->next) {
+            slow = slow->next;
+            fast = fast->next->next;
         }
 
         *front = source;
         *back = slow->next;
+        slow->next = nullptr;
 
         if (*back) (*back)->prev = nullptr;
-        slow->next = nullptr;
     }
 
     
@@ -81,8 +85,7 @@ public:
     // Constructor
 
     doublyLinkedList() : head(nullptr), tail(nullptr) {}
-
-    // ------------------------------------------------------------------------------------------------------
+    
     // Destructor
 
     ~doublyLinkedList(){
@@ -91,10 +94,24 @@ public:
         }
     }
 
-    // ------------------------------------------------------------------------------------------------------
     // Accessing List
 
-    void printList(){
+    // To find the node at a specific position
+    Node* getNodeAt(int pos) const {
+        if (pos < 0) throw out_of_range("Position cannot be negative");
+
+        Node* curr = head;
+        int cnt = 0;
+        do {
+            if (cnt == pos) return curr;
+            curr = curr->next;
+            cnt++;
+        } while (curr != head);
+
+        throw out_of_range("Position out of bounds");
+    }
+
+    void printList() const {
         Node* curr = head;
         
         while (curr) {
@@ -105,7 +122,6 @@ public:
         cout<<endl;
     }
 
-    // ------------------------------------------------------------------------------------------------------
     // List Manipulation
 
     // Insert element at the end
@@ -198,7 +214,7 @@ public:
         }
     }
 
-    bool find(T ele){
+    bool find(T ele) const {
         Node* curr = head;
         while (curr) {
             if (curr->val == ele) {

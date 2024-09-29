@@ -165,16 +165,16 @@ public:
         s--;
     }
 
-    bool isEmpty() {
+    bool isEmpty() const {
         return s == 0;
     }
 
-    int getHeight(Node* node) {
+    int getHeight(Node* node) const {
         if (node == nullptr) return 0;
         return 1 + max(getHeight(node->left), getHeight(node->right));
     }
 
-    void inorder() {
+    void inorder() const {
         if (isEmpty()) {
             cout << "Tree is empty." << endl;
             return;
@@ -183,7 +183,7 @@ public:
         cout << endl;
     }
 
-    void preorder() {
+    void preorder() const {
         if (isEmpty()) {
             cout << "Tree is empty." << endl;
             return;
@@ -192,7 +192,7 @@ public:
         cout << endl;
     }
 
-    void postorder() {
+    void postorder() const {
         if (isEmpty()) {
             cout << "Tree is empty." << endl;
             return;
@@ -201,7 +201,7 @@ public:
         cout << endl;
     }
 
-    void levelOrder() {
+    void levelOrder() const {
         if (isEmpty()) {
             cout << "Tree is empty." << endl;
             return;
@@ -209,11 +209,11 @@ public:
         levelOrderTraversal();
     }
 
-    void bfs() {
+    void bfs() const {
         levelOrder();
     }
 
-    void dfs() {
+    void dfs() const {
         if (isEmpty()) {
             cout << "Tree is empty." << endl;
             return;

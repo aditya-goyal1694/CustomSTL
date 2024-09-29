@@ -126,11 +126,6 @@ public:
         clearTree(root);
     }
 
-    int getHeight(Node* node) {
-        if (node == nullptr) return 0;
-        return 1 + max(getHeight(node->left), getHeight(node->right));
-    }
-
     void clearTree(Node* node) {
         if (node == nullptr) return;
         clearTree(node->left);
@@ -152,15 +147,20 @@ public:
         node->data = newVal;
     }
 
-    int getSize() {
+    int getSize() const {
         return s;
     }
 
-    bool isEmpty() {
+    int getHeight(Node* node) const {
+        if (node == nullptr) return 0;
+        return 1 + max(getHeight(node->left), getHeight(node->right));
+    }
+
+    bool isEmpty() const {
         return s == 0;
     }
 
-    bool find(T element) {
+    bool find(T element) const {
         return findElement(root, element) != nullptr;
     }
 
@@ -189,7 +189,7 @@ public:
         return parent->data;
     }
 
-    void preorder() {
+    void preorder() const {
         if (isEmpty()) {
             cout << "Tree is empty." << endl;
             return;
@@ -198,7 +198,7 @@ public:
         cout << endl;
     }
 
-    void inorder() {
+    void inorder() const {
         if (isEmpty()) {
             cout << "Tree is empty." << endl;
             return;
@@ -207,7 +207,7 @@ public:
         cout << endl;
     }
 
-    void postorder() {
+    void postorder() const {
         if (isEmpty()) {
             cout << "Tree is empty." << endl;
             return;
@@ -216,7 +216,7 @@ public:
         cout << endl;
     }
 
-    void levelOrder() {
+    void levelOrder() const {
         if (isEmpty()) {
             cout << "Tree is empty." << endl;
             return;
@@ -225,11 +225,11 @@ public:
         cout << endl;
     }
 
-    void bfs() {
+    void bfs() const {
         levelOrder();
     }
 
-    void dfs() {
+    void dfs() const {
         if (root == nullptr) {
             cout << "Tree is empty." << endl;
             return;

@@ -141,7 +141,7 @@ public:
         return maxElement;
     }
 
-    T getMax() {
+    T getMax() const {
         if (isEmpty()) {
             throw runtime_error("Heap is empty.");
         }

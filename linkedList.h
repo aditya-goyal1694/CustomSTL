@@ -13,7 +13,7 @@ class LinkedList{
 
     Node* head;
 
-    // Helper Functions:
+    // HELPER METHODS
 
     // Helper function to merge two sorted lists
     Node* merge(Node* left, Node* right) {
@@ -30,6 +30,12 @@ class LinkedList{
 
     // Helper function to split the list into two halves
     void split(Node* source, Node** front, Node** back) {
+        if (!source) {
+            *front = nullptr;
+            *back = nullptr;
+            return;
+        }
+
         Node* slow = source;
         Node* fast = source->next;
 
@@ -96,7 +102,6 @@ class LinkedList{
             head = new Node(val);
         }
 
-        // ------------------------------------------------------------------------------------------------------
         // Destructor
 
         ~LinkedList() {
@@ -107,11 +112,10 @@ class LinkedList{
             }
         }
 
-        // ------------------------------------------------------------------------------------------------------
-        // Element Access
+        // ELEMENT ACCESS
 
         // To find the node at a specific position
-        Node* getNodeAt(int pos) {
+        Node* getNodeAt(int pos) const {
             if (pos < 0) throw out_of_range("Position cannot be negative");
 
             Node* curr = head;
@@ -125,7 +129,7 @@ class LinkedList{
         }
         
         // Print the list
-        void printList() {
+        void printList() const {
             Node* temp = head;
             while (temp) {
                 cout << temp->val << " -> ";
@@ -134,8 +138,7 @@ class LinkedList{
             cout<<"NULL"<<endl;
         }
 
-        // ------------------------------------------------------------------------------------------------------
-        // List Manipulation
+        // LIST MANIPULATION
 
         // Insert at the end
         void insert(T ele) {
@@ -230,7 +233,7 @@ class LinkedList{
         }
 
 
-        int find(T ele) {
+        int find(T ele) const {
             Node* temp = head;
             int pos = 0;
             while (temp) {

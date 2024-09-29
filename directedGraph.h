@@ -3,7 +3,6 @@
 #include <limits>
 #include "customVector.h"
 #include "customQueue.h"
-
 using namespace std;
 
 template<typename T>
@@ -85,7 +84,7 @@ public:
         }
     }
 
-    void BFS(int startnode) {
+    void bfs(int startnode) {
         if (startnode < 0 || startnode >= numVertices) 
             throw invalid_argument("Invalid start node: " + to_string(startnode));
 
@@ -95,7 +94,7 @@ public:
         visited[startnode] = true;
         q.push(startnode);
 
-        while (!q.empty()) {
+        while (!q.isEmpty()) {
             int node = q.front();
             q.pop();
             cout << node << " ";
@@ -110,7 +109,7 @@ public:
         cout << endl;
     }
 
-    void DFS(int startnode) {
+    void dfs(int startnode) {
         if (startnode < 0 || startnode >= numVertices) 
             throw invalid_argument("Invalid start node: " + to_string(startnode));
 
@@ -119,7 +118,7 @@ public:
         cout << endl;
     }
 
-    bool detectCycle() {
+    bool detectCycle() const {
         customVector<bool> visited(numVertices, false);
         customVector<bool> recStack(numVertices, false);
 
@@ -133,7 +132,7 @@ public:
         return false;
     }
 
-    int shortestPath(int startNode, int endNode) {
+    int shortestPath(int startNode, int endNode) const {
         if (startNode < 0 || startNode >= numVertices || endNode < 0 || endNode >= numVertices) {
             throw invalid_argument("Invalid start or end node: " + to_string(startNode) + ", " + to_string(endNode));
         }
@@ -148,7 +147,7 @@ public:
         customQueue<int> q;
         q.push(startNode);
 
-        while (!q.empty()) {
+        while (!q.isEmpty()) {
             int node = q.front();
             q.pop();
 
@@ -164,7 +163,7 @@ public:
         return (distance[endNode] == numeric_limits<int>::max()) ? -1 : distance[endNode];
     }
 
-    bool pathExist(int startnode, int endnode) {
+    bool pathExist(int startnode, int endnode) const {
         if (startnode < 0 || startnode >= numVertices || endnode < 0 || endnode >= numVertices) {
             throw invalid_argument("Invalid start or end node: " + to_string(startnode) + ", " + to_string(endnode));
         }
@@ -175,7 +174,7 @@ public:
         visited[startnode] = true;
         q.push(startnode);
 
-        while (!q.empty()) {
+        while (!q.isEmpty()) {
             int node = q.front();
             q.pop();
 
@@ -204,7 +203,7 @@ public:
         return reversedGraph;
     }
 
-    customVector<int> toposort() {
+    customVector<int> toposort() const {
         if (detectCycle()) {
             throw runtime_error("Graph is not a DAG. Topological sorting is not possible.");
         }

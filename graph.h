@@ -3,7 +3,6 @@
 #include <stdexcept>
 #include <limits>
 #include "customQueue.h"
-
 using namespace std;
 
 template<typename T>
@@ -67,7 +66,7 @@ public:
         }
     }
 
-    void BFS(int startnode) {
+    void bfs(int startnode) {
         if (startnode < 0 || startnode >= numVertices) throw invalid_argument("Invalid start node.");
 
         customVector<bool> visited(numVertices, false);
@@ -76,7 +75,7 @@ public:
         visited[startnode] = true;
         q.push(startnode);
 
-        while (!q.empty()) {
+        while (!q.isEmpty()) {
             int node = q.front();
             q.pop();
             cout << node << " ";
@@ -91,7 +90,7 @@ public:
         cout << endl;
     }
 
-    void DFS(int startnode) {
+    void dfs(int startnode) const {
         if (startnode < 0 || startnode >= numVertices) throw invalid_argument("Invalid start node.");
 
         customVector<bool> visited(numVertices, false);
@@ -99,7 +98,7 @@ public:
         cout << endl;
     }
 
-    bool detectCycle() {
+    bool detectCycle() const {
         customVector<bool> visited(numVertices, false);
         for (int i = 0; i < numVertices; ++i) {
             if (!visited[i]) {
@@ -111,7 +110,7 @@ public:
         return false;
     }
 
-    int shortestPath(int startNode, int endNode) {
+    int shortestPath(int startNode, int endNode) const {
         if (startNode < 0 || startNode >= numVertices || endNode < 0 || endNode >= numVertices) {
             throw invalid_argument("Invalid start or end node.");
         }
@@ -130,7 +129,7 @@ public:
         customQueue<int> q;
         q.push(startNode);
 
-        while (!q.empty()) {
+        while (!q.isEmpty()) {
             int node = q.front();
             q.pop();
 
@@ -151,7 +150,7 @@ public:
         return result;
     }
 
-    bool pathExist(int startnode, int endnode) {
+    bool pathExist(int startnode, int endnode) const {
         if (startnode < 0 || startnode >= numVertices || endnode < 0 || endnode >= numVertices) {
             throw invalid_argument("Invalid start or end node.");
         }
@@ -162,7 +161,7 @@ public:
         visited[startnode] = true;
         q.push(startnode);
 
-        while (!q.empty()) {
+        while (!q.isEmpty()) {
             int node = q.front();
             q.pop();
 

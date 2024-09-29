@@ -1,1 +1,2 @@
-std::numeric_limits<size_t>::max(): This expression returns the largest possible value that can be represented by the size_t type. The size_t type is an unsigned integer type used for sizes and counts, which means it can represent very large numbers.
+std::numeric_limits<size_t>::max(): This expression returns the largest possible value that can be represented by the size_t type.
+The size_t type is an unsigned integer type used for sizes and counts, which means it can represent very large numbers.

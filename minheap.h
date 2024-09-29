@@ -15,7 +15,7 @@ private:
     };
 
     Node* root;
-    int s;          // size
+    int s;          // s
 
     void swap(Node* a, Node* b) {
         T temp = a->data;
@@ -110,7 +110,7 @@ public:
             root = newNode;
         }
         heapifyUp(newNode);
-        size++;
+        s++;
     }
 
     T extractMin() {
@@ -137,12 +137,12 @@ public:
             heapifyDown(root);
         }
 
-        size--;
+        s--;
         return minElement;
     }
 
     T getMin() {
-        if (isEmpty()) {
+        if (isEmpty()){
             throw runtime_error("Heap is empty.");
         }
         return root->data;
@@ -152,7 +152,7 @@ public:
         return s == 0;
     }
 
-    int getSize() const {
+    int gets() const {
         return s;
     }
 };

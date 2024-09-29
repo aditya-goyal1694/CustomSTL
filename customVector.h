@@ -1,9 +1,6 @@
 #include <iostream>
 #include <stdexcept>
 #include <iterator>
-#include <algorithm>
-#include <memory>
-#include <limits>
 using namespace std;  
 
 template <typename T>
@@ -27,9 +24,8 @@ private:
         delete[] arr; // Free the old memory
         arr = temp;
     }
-    // ---------------------------------------------------------------------------------------------------------------------------------------
-
-    // Helper methods
+    
+    // HELPER METHODS
 
     void merge(T *arr, int l, int mid, int r)
     {
@@ -143,8 +139,6 @@ public:
         }
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------------------------
-
     // Destructor
 
     ~customVector()
@@ -152,9 +146,7 @@ public:
         delete[] arr;
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------------------------
-
-    // Capacity methods
+    // CAPACITY METHODS
 
     size_t size()
     {
@@ -240,9 +232,7 @@ public:
         }
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------------------------
-
-    // Element Access
+    // ELEMENT ACCESS
 
     T &operator[](int index)
     {
@@ -298,9 +288,7 @@ public:
         return arr[s - 1];
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------------------------
-
-    // Modifiers
+    // MODIFIERS
 
     void push_back(T ele)
     {
@@ -323,7 +311,7 @@ public:
         s--;
     }
 
-    void assign(size_t count, T &value)
+    void assign(size_t count, const T &value)
     {
         if (count > c)
         {
@@ -338,7 +326,7 @@ public:
         s = count;
     }
 
-    void insert(size_t pos, T &value)
+    void insert(size_t pos, T &val)
     {
         if (pos > s)
         {
@@ -349,7 +337,7 @@ public:
             reserve(c + 10);
         }
 
-        int i=n-1;
+        int i=s-1;
         while(i>=pos-1){
             arr[i+1]=arr[i];
             i--;
@@ -389,16 +377,7 @@ public:
         s = 0;
     }
 
-    void swap(customVector &other)
-    {
-        std::swap(arr, other.arr); // Swaps the arr pointers
-        std::swap(c, other.c);
-        std::swap(s, other.s);
-    }
-
-    // ---------------------------------------------------------------------------------------------------------------------------------------
-
-    // Iterators
+    // ITERATORS
 
     T *begin()
     {
@@ -440,9 +419,7 @@ public:
         return std::reverse_iterator<const T *>(cbegin());
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------------------------
-
-    // Custom Methods
+    // CUSTOM METHODS
 
     void sort(int start, int end)
     {
