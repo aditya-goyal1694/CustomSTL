@@ -1,7 +1,11 @@
 #include <iostream>
-#include <stdexcept>
 #include <iterator>
-using namespace std;  
+#include <stdexcept>
+
+using namespace std;
+
+#ifndef CUSTOMVECTOR_H
+#define CUSTOMVECTOR_H
 
 template <typename T>
 class customVector
@@ -13,7 +17,7 @@ private:
 
     void new_allocation()
     {
-        c = c + 20;
+        c = (c == 0) ? 1 : c * 2; // Double the capacity
         T *temp = new T[c];
 
         for (auto i = 0; i < s; i++)
@@ -24,7 +28,7 @@ private:
         delete[] arr; // Free the old memory
         arr = temp;
     }
-    
+
     // HELPER METHODS
 
     void merge(T *arr, int l, int mid, int r)
@@ -123,12 +127,9 @@ private:
 public:
     // Constructors
 
-    customVector() : arr(new T[20]), s(0), c(20) {}
+    customVector() : arr(nullptr), s(0), c(0) {}
 
-    customVector(int n) : s(0), c(n)
-    {
-        arr = new T[n];
-    }
+    customVector(int n) : s(0), c(n) { arr = new T[n]; }
 
     customVector(int n, T val) : c(n), s(n)
     {
@@ -139,29 +140,45 @@ public:
         }
     }
 
+    // Constructor for initializer list
+    customVector(std::initializer_list<T> list) : s(list.size()), c(list.size())
+    {
+        arr = new T[c];
+        size_t index = 0;
+        for (const auto &element : list)
+        {
+            arr[index++] = element; // Copy elements from the initializer list
+        }
+    }
+
+    // Range constructor (from iterators)
+    template <typename InputIt>
+    customVector(InputIt first, InputIt last)
+    {
+        size_t size = std::distance(first, last); // Calculate the distance
+        arr = new T[size];
+        s = size;
+        c = size;
+
+        // Copy elements from the range [first, last)
+        size_t index = 0;
+        for (InputIt it = first; it != last; ++it)
+        {
+            arr[index++] = *it;
+        }
+    }
+
     // Destructor
 
-    ~customVector()
-    {
-        delete[] arr;
-    }
+    ~customVector() { delete[] arr; }
 
     // CAPACITY METHODS
 
-    size_t size()
-    {
-        return s;
-    }
+    size_t size() const { return s; }
 
-    size_t capacity()
-    {
-        return c;
-    }
+    size_t capacity() { return c; }
 
-    bool empty()
-    {
-        return s == 0;
-    }
+    bool empty() { return s == 0; }
 
     void resize(size_t newSize)
     {
@@ -179,11 +196,12 @@ public:
         s = newSize;
     }
 
-    void resize(size_t newSize, T val){             // Custom method
+    void resize(size_t newSize, T val)
+    { // Custom method
         if (newSize > c)
         {
             T *temp = new T[newSize];
-            for (size_t i = 0; i < newSize; ++i)
+            for (size_t i = 0; i < s; ++i)
             {
                 temp[i] = val;
             }
@@ -203,17 +221,17 @@ public:
 
     void reserve(int num)
     {
-        if (num > c)
+        if (num <= c)
+            return;
+
+        T *temp = new T[num];
+        for (size_t i = 0; i < s; ++i)
         {
-            T *temp = new T[num];
-            for (size_t i = 0; i < s; ++i)
-            {
-                temp[i] = arr[i];
-            }
-            delete[] arr;
-            arr = temp;
-            c = num;
+            temp[i] = arr[i];
         }
+        delete[] arr;
+        arr = temp;
+        c = num;
     }
 
     void shrink_to_fit()
@@ -290,7 +308,7 @@ public:
 
     // MODIFIERS
 
-    void push_back(T ele)
+    void push_back(const T &ele)
     {
         if (s == c)
         {
@@ -326,7 +344,7 @@ public:
         s = count;
     }
 
-    void insert(size_t pos, T &val)
+    void insert(size_t pos, const T &val)
     {
         if (pos > s)
         {
@@ -337,12 +355,13 @@ public:
             reserve(c + 10);
         }
 
-        int i=s-1;
-        while(i>=pos-1){
-            arr[i+1]=arr[i];
+        int i = s - 1;
+        while (i >= pos - 1)
+        {
+            arr[i + 1] = arr[i];
             i--;
         }
-        arr[pos-1]=val;
+        arr[pos - 1] = val;
         s++;
     }
 
@@ -353,19 +372,11 @@ public:
             throw out_of_range("Position out of range");
         }
 
-        T *temp = new T[s - 1];
-        for (auto i = 0; i < pos - 1; i++)
+        for (size_t i = pos; i < s - 1; ++i)
         {
-            temp[i] = arr[i];
+            arr[i] = arr[i + 1]; // Shift elements left
         }
-        for (auto i = pos - 1; i < s - 1; i++)
-        {
-            temp[i] = arr[i + 1];
-        }
-
-        s--;
-        delete[] arr;
-        arr = temp;
+        s--; // Reduce size
     }
 
     void clear()
@@ -379,25 +390,21 @@ public:
 
     // ITERATORS
 
-    T *begin()
-    {
-        return arr;
-    }
+    T *begin() { return arr; }
 
-    T *end()
-    {
-        return arr + s;
-    }
+    const T *begin() const { return arr; }
 
-    const T *cbegin() const
-    {
-        return arr;
-    }
+    T *end() { return arr + s; }
 
-    const T *cend() const
-    {
-        return arr + s;
-    }
+    const T *end() const { return arr + s; }
+
+    T *cbegin() { return arr; }
+
+    const T *cbegin() const { return arr; }
+
+    T *cend() { return arr + s; }
+
+    const T *cend() const { return arr + s; }
 
     std::reverse_iterator<T *> rbegin()
     {
@@ -515,3 +522,5 @@ public:
         reverse();
     }
 };
+
+#endif

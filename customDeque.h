@@ -3,11 +3,16 @@
 #include <limits>
 using namespace std;
 
+#ifndef CUSTOMDEQUE_H
+#define CUSTOMDEQUE_H
+
 template <typename T>
-class customDeque {
+class customDeque
+{
 private:
     T *q;
     size_t c; // Capacity
+    size_t s; // size
 
     T maxElement;
     T minElement;
@@ -21,16 +26,20 @@ private:
         c += 20;
         T *temp = new T[c];
 
-        if(flag){                                                                // Inserting storage in front of the queue
-            for (size_t i = frontInd; i <= backInd; i++){
-                temp[i+20] = q[i];
+        if (flag)
+        { // Inserting storage in front of the queue
+            for (size_t i = frontInd; i <= backInd; i++)
+            {
+                temp[i + 20] = q[i];
             }
 
-            frontInd+=20;
-            backInd+=20;
+            frontInd += 20;
+            backInd += 20;
         }
-        else{                                                                    // Appending storage back of the queue 
-            for (size_t i = frontInd; i <= backInd; i++){
+        else
+        { // Appending storage back of the queue
+            for (size_t i = frontInd; i <= backInd; i++)
+            {
                 temp[i] = q[i];
             }
         }
@@ -42,8 +51,8 @@ private:
 public:
     // Constructor
 
-    customDeque() : q(new T[20]), c(20), frontInd(10), backInd(12), base(11), 
-    maxElement(std::numeric_limits<T>::lowest()), minElement(std::numeric_limits<T>::max()) {}
+    customDeque() : q(new T[20]), c(20), s(0), frontInd(10), backInd(12), base(11),
+                    maxElement(std::numeric_limits<T>::lowest()), minElement(std::numeric_limits<T>::max()) {}
 
     // Destructor
 
@@ -54,31 +63,44 @@ public:
 
     // Methods
 
-    void push_back(T& ele) {
-        if (isEmpty()) {
+    void push_back(const T &ele)
+    {
+        if (isEmpty())
+        {
             maxElement = ele;
             minElement = ele;
-        } else {
-            if (ele > maxElement) maxElement = ele;
-            if (ele < minElement) minElement = ele;
+        }
+        else
+        {
+            if (ele > maxElement)
+                maxElement = ele;
+            if (ele < minElement)
+                minElement = ele;
         }
 
-        if (backInd == c-1)
+        if (backInd == c - 1)
         {
             new_allocation(1);
         }
 
         backInd++;
-        q[backInd]=ele;
+        q[backInd] = ele;
+        s++;
     }
 
-    void push_front(T& ele) {
-        if (isEmpty()) {
+    void push_front(const T &ele)
+    {
+        if (isEmpty())
+        {
             maxElement = ele;
             minElement = ele;
-        } else {
-            if (ele > maxElement) maxElement = ele;
-            if (ele < minElement) minElement = ele;
+        }
+        else
+        {
+            if (ele > maxElement)
+                maxElement = ele;
+            if (ele < minElement)
+                minElement = ele;
         }
 
         if (frontInd == 0)
@@ -87,85 +109,116 @@ public:
         }
 
         frontInd--;
-        q[frontInd]=ele;
+        q[frontInd] = ele;
+        s++;
     }
 
-    void pop_back() {
-        if(isEmpty()) {
+    void pop_back()
+    {
+        if (isEmpty())
+        {
             throw std::runtime_error("Cannot pop. Queue is empty.");
         }
 
-        if(maxElement==q[backInd]) maxElement=std::numeric_limits<T>::lowest();;
-        if(minElement==q[backInd]) minElement=std::numeric_limits<T>::max();
+        if (maxElement == q[backInd])
+            maxElement = std::numeric_limits<T>::lowest();
+        ;
+        if (minElement == q[backInd])
+            minElement = std::numeric_limits<T>::max();
 
+        s--;
         backInd--;
-        if(backInd==base) backInd--;
+        if (backInd == base)
+            backInd--;
 
-        if(frontInd==backInd){
-            backInd=base+1;
-            frontInd=base-1;
+        if (frontInd == backInd)
+        {
+            backInd = base + 1;
+            frontInd = base - 1;
         }
     }
 
-    void pop_front() {
-        if(isEmpty()) {
+    void pop_front()
+    {
+        if (isEmpty())
+        {
             throw std::runtime_error("Cannot pop. Queue is empty.");
         }
 
-        if(maxElement==q[frontInd]) maxElement=std::numeric_limits<T>::lowest();;
-        if(minElement==q[frontInd]) minElement=std::numeric_limits<T>::max();
+        if (maxElement == q[frontInd])
+            maxElement = std::numeric_limits<T>::lowest();
+        ;
+        if (minElement == q[frontInd])
+            minElement = std::numeric_limits<T>::max();
 
+        s--;
         frontInd++;
 
-        if(frontInd==base) frontInd++;
+        if (frontInd == base)
+            frontInd++;
 
-        if(frontInd==backInd){
-            backInd=base+1;
-            frontInd=base-1;
+        if (frontInd == backInd)
+        {
+            backInd = base + 1;
+            frontInd = base - 1;
         }
     }
 
-    T front() const {
-        if(isEmpty()) {
+    T front()
+    {
+        if (isEmpty())
+        {
             throw std::runtime_error("Queue is empty");
         }
         return q[frontInd];
     }
 
-    T back() const {
-        if(isEmpty()) {
+    T back()
+    {
+        if (isEmpty())
+        {
             throw std::runtime_error("Queue is empty");
         }
         return q[backInd];
     }
 
-    bool isEmpty(){
-        return frontInd==base-1 && backInd==base+1;
+    bool isEmpty()
+    {
+        return (s == 0);
     }
 
-    T maxele(){
-        if(isEmpty()) {
+    T maxele()
+    {
+        if (isEmpty())
+        {
             throw std::runtime_error("Queue is empty");
         }
 
-        if(maxElement==std::numeric_limits<T>::lowest()){
-            for(int i=frontInd;i<=backInd;i++){
-                maxElement=(q[i]>=maxElement)?q[i]:maxElement;
+        if (maxElement == std::numeric_limits<T>::lowest())
+        {
+            maxElement = q[frontInd];
+            for (int i = frontInd; i <= backInd; i++)
+            {
+                maxElement = (q[i] >= maxElement) ? q[i] : maxElement;
             }
         }
 
         return maxElement;
     }
 
-    T minele(){
-        if (isEmpty()) {
+    T minele()
+    {
+        if (isEmpty())
+        {
             throw std::runtime_error("Queue is empty");
         }
 
-        
-        if(minElement==std::numeric_limits<T>::max()){
-            for(int i=frontInd;i<=backInd;i++){
-                minElement=(q[i]<=minElement)?q[i]:minElement;
+        if (minElement == std::numeric_limits<T>::max())
+        {
+            minElement = q[frontInd];
+            for (int i = frontInd; i <= backInd; i++)
+            {
+                minElement = (q[i] <= minElement) ? q[i] : minElement;
             }
         }
 
@@ -174,11 +227,13 @@ public:
 
     void clear()
     {
-        maxElement = std::numeric_limits<T>::lowest();;
+        maxElement = std::numeric_limits<T>::lowest();
+        ;
         minElement = std::numeric_limits<T>::max();
 
         frontInd = base - 1;
         backInd = base + 1;
     }
-
 };
+
+#endif

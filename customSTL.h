@@ -1,14 +1,20 @@
-#include "customVector.h"
-#include "linkedList.h"
-#include "circularLinkedList.h"
-#include "doublyLinkedList.h"
-#include "customStack.h"
-#include "monotonicStack.h"
-#include "customQueue.h"
-#include "customDeque.h"
+#ifndef CUSTOMSTL_H
+#define CUSTOMSTL_H
+
 #include "binaryTree.h"
 #include "bst.h"
-#include "minheap.h"
-#include "maxheap.h"
-#include "graph.h"
+#include "circularLinkedList.h"
+#include "customDeque.h"
+#include "customQueue.h"
+#include "customStack.h"
+#include "customVector.h"
 #include "directedGraph.h"
+#include "doublyLinkedList.h"
+#include "graph.h"
+#include "linkedList.h"
+#include "maxheap.h"
+#include "minheap.h"
+#include "monotonicStack.h"
+
+
+#endif

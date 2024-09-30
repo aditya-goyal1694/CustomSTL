@@ -2,92 +2,118 @@
 #include <stdexcept>
 using namespace std;
 
-template<typename T>
-class MaxHeap {
+#ifndef MAXHEAP_H
+#define MAXHEAP_H
+
+template <typename T>
+class MaxHeap
+{
 private:
-    struct Node {
+    struct Node
+    {
         T data;
-        Node* left;
-        Node* right;
-        Node* parent;
+        Node *left;
+        Node *right;
+        Node *parent;
 
         Node(T val) : data(val), left(nullptr), right(nullptr), parent(nullptr) {}
     };
 
-    Node* root;
-    int s;          // size
+    Node *root;
+    int s; // size
 
-    void swap(Node* a, Node* b) {
+    void swap(Node *a, Node *b)
+    {
         T temp = a->data;
         a->data = b->data;
         b->data = temp;
     }
 
     // For deletion
-    void heapifyDown(Node* node) {
-        if (!node) return;
+    void heapifyDown(Node *node)
+    {
+        if (!node)
+            return;
 
-        Node* largest = node;
+        Node *largest = node;
 
-        if (node->left && node->left->data > largest->data) {
+        if (node->left && node->left->data > largest->data)
+        {
             largest = node->left;
         }
 
-        if (node->right && node->right->data > largest->data) {
+        if (node->right && node->right->data > largest->data)
+        {
             largest = node->right;
         }
 
-        if (largest != node) {
+        if (largest != node)
+        {
             swap(node, largest);
             heapifyDown(largest);
         }
     }
 
     // For insertion
-    void heapifyUp(Node* node) {
-        if (!node || !node->parent) return;
+    void heapifyUp(Node *node)
+    {
+        if (!node || !node->parent)
+            return;
 
-        if (node->data > node->parent->data) {
+        if (node->data > node->parent->data)
+        {
             swap(node, node->parent);
             heapifyUp(node->parent);
         }
     }
 
-    Node* insertNode(Node* node, T element) {
-        if (!node) {
+    Node *insertNode(Node *node, T element)
+    {
+        if (!node)
+        {
             return new Node(element);
         }
 
         // Level order insertion
-        if (!node->left) {
+        if (!node->left)
+        {
             node->left = new Node(element);
             node->left->parent = node;
             return node->left;
-        } else if (!node->right) {
+        }
+        else if (!node->right)
+        {
             node->right = new Node(element);
             node->right->parent = node;
             return node->right;
         }
 
         // If both children are present, we go deeper in the tree
-        Node* leftResult = insertNode(node->left, element);
-        if (leftResult) return leftResult;
+        Node *leftResult = insertNode(node->left, element);
+        if (leftResult)
+            return leftResult;
 
         return insertNode(node->right, element);
     }
 
-    Node* findLast(Node* node) {
-        if (!node) return nullptr;
+    Node *findLast(Node *node)
+    {
+        if (!node)
+            return nullptr;
 
         // Level order traversal
-        Node* lastNode = nullptr;
-        Node* temp = node;
+        Node *lastNode = nullptr;
+        Node *temp = node;
 
-        while (temp) {
+        while (temp)
+        {
             lastNode = temp;
-            if (temp->left) temp = temp->left;
-            else if (temp->right) temp = temp->right;
-            else break;
+            if (temp->left)
+                temp = temp->left;
+            else if (temp->right)
+                temp = temp->right;
+            else
+                break;
         }
 
         return lastNode;
@@ -98,38 +124,51 @@ public:
     MaxHeap() : root(nullptr), s(0) {}
 
     // Destructor
-    ~MaxHeap() {
-        while (!isEmpty()) {
+    ~MaxHeap()
+    {
+        while (!isEmpty())
+        {
             extractMax();
         }
     }
 
-    void insert(T element) {
-        Node* newNode = insertNode(root, element);
-        if (!root) {
+    void insert(T element)
+    {
+        Node *newNode = insertNode(root, element);
+        if (!root)
+        {
             root = newNode;
         }
         heapifyUp(newNode);
         s++;
     }
 
-    T extractMax() {
-        if (isEmpty()) {
+    T extractMax()
+    {
+        if (isEmpty())
+        {
             throw std::runtime_error("Heap is empty.");
         }
 
         T maxElement = root->data;
 
-        Node* lastNode = findLast(root);
-        if (lastNode == root) {
+        Node *lastNode = findLast(root);
+        if (lastNode == root)
+        {
             delete root;
             root = nullptr;
-        } else {
+        }
+        else
+        {
             root->data = lastNode->data; // Move last node to root
-            if (lastNode->parent) {
-                if (lastNode->parent->left == lastNode) {
+            if (lastNode->parent)
+            {
+                if (lastNode->parent->left == lastNode)
+                {
                     lastNode->parent->left = nullptr;
-                } else {
+                }
+                else
+                {
                     lastNode->parent->right = nullptr;
                 }
             }
@@ -141,18 +180,24 @@ public:
         return maxElement;
     }
 
-    T getMax() const {
-        if (isEmpty()) {
+    T getMax() const
+    {
+        if (isEmpty())
+        {
             throw runtime_error("Heap is empty.");
         }
         return root->data;
     }
 
-    bool isEmpty() const {
+    bool isEmpty() const
+    {
         return s == 0;
     }
 
-    int getSize() const {
+    int getSize() const
+    {
         return s;
     }
 };
+
+#endif

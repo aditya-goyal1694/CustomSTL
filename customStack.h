@@ -3,8 +3,12 @@
 #include <limits>
 using namespace std;
 
+#ifndef CUSTOMSTACK_H
+#define CUSTOMSTACK_H
+
 template <typename T>
-class customStack {
+class customStack
+{
 private:
     T *st;
     size_t c; // Capacity
@@ -31,8 +35,8 @@ private:
 
 public:
     // Constructor
-    customStack() : st(new T[20]), s(0), c(20), topIndex(-1), 
-                    maxElement(std::numeric_limits<T>::lowest()), 
+    customStack() : st(new T[20]), s(0), c(20), topIndex(-1),
+                    maxElement(std::numeric_limits<T>::lowest()),
                     minElement(std::numeric_limits<T>::max()) {}
 
     // Destructor
@@ -43,70 +47,89 @@ public:
 
     // Methods
 
-    void push(T ele) {
+    void push(const T &ele)
+    {
 
         if (s == c)
         {
             new_allocation();
         }
 
-        if (isEmpty()) {
+        if (isEmpty())
+        {
             maxElement = ele;
             minElement = ele;
-        } else {
+        }
+        else
+        {
             maxElement = (maxElement >= ele) ? maxElement : ele;
             minElement = (minElement <= ele) ? minElement : ele;
         }
 
         topIndex++;
-        st[topIndex]=ele;
+        st[topIndex] = ele;
         s++;
     }
 
-    void pop() {
-        if(isEmpty()) {
+    void pop()
+    {
+        if (isEmpty())
+        {
             throw std::underflow_error("Stack underflow");
         }
 
-        if(maxElement==st[topIndex]) maxElement=std::numeric_limits<T>::lowest();
-        if(minElement==st[topIndex]) minElement=std::numeric_limits<T>::max();
+        if (maxElement == st[topIndex])
+            maxElement = std::numeric_limits<T>::lowest();
+        if (minElement == st[topIndex])
+            minElement = std::numeric_limits<T>::max();
 
         topIndex--;
         s--;
     }
 
-    T top() const {
-        if(isEmpty()) {
+    T top()
+    {
+        if (isEmpty())
+        {
             throw std::underflow_error("Stack is empty");
         }
         return st[topIndex];
     }
 
-    bool isEmpty() const {
-        return s==0;
+    bool isEmpty()
+    {
+        return s == 0;
     }
 
-    T maxele(){
-        if(isEmpty()) {
+    T maxele()
+    {
+        if (isEmpty())
+        {
             throw std::underflow_error("Stack is empty");
         }
 
-        if(maxElement==std::numeric_limits<T>::lowest()){
-            maxElement=st[0];
-            for(int i=0;i<topIndex;i++) maxElement=(st[i]>=maxElement)?st[i]:maxElement;
+        if (maxElement == std::numeric_limits<T>::lowest())
+        {
+            maxElement = st[0];
+            for (int i = 0; i < topIndex; i++)
+                maxElement = (st[i] >= maxElement) ? st[i] : maxElement;
         }
 
         return maxElement;
     }
 
-    T minele(){
-        if (isEmpty()) {
+    T minele()
+    {
+        if (isEmpty())
+        {
             throw std::underflow_error("Stack is empty");
         }
 
-        if(minElement==std::numeric_limits<T>::max()){
-            minElement=st[0];
-            for(int i=0;i<topIndex;i++) minElement=(st[i]>=minElement)?st[i]:minElement;
+        if (minElement == std::numeric_limits<T>::max())
+        {
+            minElement = st[0];
+            for (int i = 0; i < topIndex; i++)
+                minElement = (st[i] >= minElement) ? st[i] : minElement;
         }
 
         return minElement;
@@ -115,9 +138,10 @@ public:
     void clear()
     {
         s = 0;
-        topIndex=-1;
-        maxElement=std::numeric_limits<T>::lowest();
-        minElement=std::numeric_limits<T>::max();
+        topIndex = -1;
+        maxElement = std::numeric_limits<T>::lowest();
+        minElement = std::numeric_limits<T>::max();
     }
-
 };
+
+#endif

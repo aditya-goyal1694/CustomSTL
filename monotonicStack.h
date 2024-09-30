@@ -2,8 +2,12 @@
 #include <stdexcept>
 using namespace std;
 
+#ifndef MONOTONICSTACK_H
+#define MONOTONICSTACK_H
+
 template <typename T>
-class monotonicStack {
+class monotonicStack
+{
 private:
     T *st;
     size_t c; // Capacity
@@ -28,9 +32,9 @@ private:
 
 public:
     // Constructors
-    monotonicStack() : st(new T[20]), s(0), c(20), topIndex(-1), descending(false){}
+    monotonicStack() : st(new T[20]), s(0), c(20), topIndex(-1), descending(false) {}
 
-    monotonicStack(bool desc) : st(new T[20]), s(0), c(20), topIndex(-1), descending(desc){}
+    monotonicStack(bool desc) : st(new T[20]), s(0), c(20), topIndex(-1), descending(desc) {}
 
     // Destructor
     ~monotonicStack()
@@ -40,32 +44,37 @@ public:
 
     // Methods
 
-    void push(T& ele) {
+    void push(const T &ele)
+    {
         if (s == c)
         {
             new_allocation();
         }
 
-        if(descending){
-            while(topIndex>=0 && ele>st[topIndex]){
-                st.pop();
-                s--;
-                topIndex--;
+        if (descending)
+        {
+            while (topIndex >= 0 && ele > st[topIndex])
+            {
+                pop();
             }
         }
-        else{
-            while(topIndex>=0 && ele<st[topIndex]){
+        else
+        {
+            while (topIndex >= 0 && ele < st[topIndex])
+            {
                 pop();
             }
         }
 
         topIndex++;
-        st[topIndex]=ele;
+        st[topIndex] = ele;
         s++;
     }
 
-    void pop() {
-        if(isEmpty()) {
+    void pop()
+    {
+        if (isEmpty())
+        {
             throw std::underflow_error("Stack underflow");
         }
 
@@ -73,21 +82,25 @@ public:
         s--;
     }
 
-    T top(){
-        if(isEmpty()){
+    T top()
+    {
+        if (isEmpty())
+        {
             throw std::underflow_error("Stack is empty");
         }
         return st[topIndex];
     }
 
-    bool isEmpty() const {
-        return s==0;
+    bool isEmpty() const
+    {
+        return s == 0;
     }
 
     void clear()
     {
-        topIndex=-1;
+        topIndex = -1;
         s = 0;
     }
-
 };
+
+#endif
