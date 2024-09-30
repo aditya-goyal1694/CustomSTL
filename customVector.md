@@ -1,151 +1,250 @@
-
-# customVector Documentation
+# customVector Class Documentation
 
 ## Overview
+The customVector class template provides a dynamic array implementation with automatic resizing. It includes various methods for element access, capacity management, sorting, and custom operations. This class can handle any data type (T).
 
-The `customVector` class is a custom implementation of a dynamic array similar to the `std::vector` in C++. It dynamically resizes as elements are added or removed. This class provides a variety of methods for element access, modification, sorting, and iteration.
+## Key Features:
+- Automatic resizing of the vector when adding elements.
+- Methods for accessing elements, modifying capacity, and iterating over the contents.
+- Sorting options: `insertion sort`, `quicksort`, and `merge sort` based on the size of the array.
+- Custom methods for reversing and rotating elements.
 
-### Table of Contents
+---
 
-- [Class Overview](#class-overview)
-- [Capacity Methods](#capacity-methods)
-- [Element Access](#element-access)
-- [Modifiers](#modifiers)
-- [Iterators](#iterators)
-- [Custom Methods](#custom-methods)
+## Constructors
 
-## Class Overview
-
-The `customVector` class template can store any data type. It dynamically manages its own memory and grows in capacity when necessary.
-
+### Default Constructor
 ```cpp
-template <typename T>
-class customVector {
-    // Private members
-    T *arr;
-    size_t c;  // Capacity
-    size_t s;  // Size
-};
+customVector();
 ```
+- Creates an empty vector with no allocated memory.
 
-### Constructors
+### `Constructor` with Initial Capacity
+```cpp
+customVector(int n);
+```
+- Creates a vector with an initial capacity of n, but size is set to 0.
 
-- **Default constructor:** `customVector()` creates an empty vector.
-- **Constructor with initial capacity:** `customVector(int n)` creates a vector with a specified capacity.
-- **Constructor with initial values:** `customVector(int n, T val)` creates a vector with a specified size and initializes all elements to a given value.
-- **Initializer list constructor:** Allows creating a vector using an initializer list.
-- **Range constructor:** Initializes a vector from a range of iterators.
+### `Constructor` with Initial Size and Value
+```cpp
+customVector(int n, T val);
+```
+- Creates a vector with an initial size of n and fills it with the value val.
 
-### Destructor
+### `Initializer` List Constructor
+```cpp
+customVector(std::initializer_list<T> list);
+```
+- Constructs a vector from an initializer list of values.
 
-- **Destructor:** Automatically deallocates memory when the vector is destroyed.
+### `Range` Constructor
+```cpp
+template <typename InputIt>
+customVector(InputIt first, InputIt last);
+```
+- Constructs a vector from the elements in the range [first, last].
 
+---
+
+## Destructor
+
+### `Destructor`
 ```cpp
 ~customVector();
 ```
+- Destroys the vector and frees all the allocated memory.
+
+---
 
 ## Capacity Methods
 
-### `size()`
-- **Returns:** The number of elements currently in the vector.
-  
-### `capacity()`
-- **Returns:** The current capacity of the vector (i.e., how many elements can be stored without resizing).
+### `size` Method
+```cpp
+size_t size() const;
+```
+- Returns the number of elements currently stored in the vector.
 
-### `empty()`
-- **Returns:** `true` if the vector is empty, `false` otherwise.
+### `capacity` Method
+```cpp
+size_t capacity();
+```
+- Returns the total allocated capacity of the vector.
 
-### `resize(size_t newSize)`
-- **Description:** Resizes the vector to `newSize`. If `newSize` is larger than the current capacity, the vector will expand.
+### `empty` Method
+```cpp
+bool empty();
+```
+- Returns true if the vector is empty, otherwise false.
 
-### `resize(size_t newSize, T val)`
-- **Description:** Resizes the vector to `newSize` and fills new elements with `val`.
+### `resize` Method
+```cpp
+void resize(size_t newSize);
+```
+- Resizes the vector to the specified newSize. If the new size is greater than the current capacity, memory is reallocated.
 
-### `reserve(int num)`
-- **Description:** Reserves memory for at least `num` elements to avoid multiple reallocations.
+### `reserve` Method
+```cpp
+void reserve(int num);
+```
+- Increases the capacity of the vector to at least num. If the capacity is already greater than or equal to num, no action is taken.
 
-### `shrink_to_fit()`
-- **Description:** Reduces the capacity to match the current size.
+### `shrink_to_fit` Method
+```cpp
+void shrink_to_fit();
+```
+- Shrinks the capacity of the vector to match its size, deallocating unused memory.
+
+---
 
 ## Element Access
 
-### `operator[](int index)`
-- **Description:** Provides access to the element at the given index. Throws an `out_of_range` exception if the index is invalid.
+### `operator`[] Method
+```cpp
+T& operator[](int index);
+```
+- Provides access to the element at the specified index. Throws out_of_range if the index is invalid.
 
-### `front()`
-- **Description:** Returns a reference to the first element in the vector.
+### `front` Method
+```cpp
+T& front();
+```
+- Returns a reference to the first element in the vector. Throws out_of_range if the vector is empty.
 
-### `back()`
-- **Description:** Returns a reference to the last element in the vector.
+### `back` Method
+```cpp
+T& back();
+```
+- Returns a reference to the last element in the vector. Throws out_of_range if the vector is empty.
+Modifiers
 
-## Modifiers
+### `push_back` Method
+```cpp
+void push_back(const T& ele);
+```
+- Adds the given element ele to the end of the vector, resizing if necessary.
 
-### `push_back(const T &ele)`
-- **Description:** Adds a new element `ele` to the end of the vector, resizing if necessary.
+### `pop_back` Method
+```cpp
+void pop_back();
+```
+- Removes the last element from the vector. Throws out_of_range if the vector is empty.
 
-### `pop_back()`
-- **Description:** Removes the last element from the vector.
+### `assign` Method
+```cpp
+void assign(size_t count, const T& value);
+```
+- Fills the vector with count copies of value.
 
-### `assign(size_t count, const T &value)`
-- **Description:** Assigns `count` copies of `value` to the vector, resizing if necessary.
+### `insert` Method
+```cpp
+void insert(size_t pos, const T& val);
+```
+- Inserts val at position pos, shifting all subsequent elements.
 
-### `insert(size_t pos, const T &val)`
-- **Description:** Inserts `val` at the given position `pos`. Shifts elements to the right.
+### `erase` Method
+```cpp
+void erase(size_t pos);
+```
+- Erases the element at position pos, shifting all subsequent elements left.
 
-### `erase(size_t pos)`
-- **Description:** Erases the element at the specified position `pos`.
+### `clear` Method
+```cpp
+void clear();
+```
+- Clears the vector, destroying all elements.
 
-### `clear()`
-- **Description:** Removes all elements from the vector, resetting the size to 0.
+---
 
 ## Iterators
 
-### `begin()` and `end()`
-- **Description:** Returns pointers (or const pointers) to the beginning and end of the vector, respectively.
-
-### `rbegin()` and `rend()`
-- **Description:** Returns reverse iterators to the beginning and end of the vector, respectively.
-
-### Example:
+### `begin` Method
 ```cpp
-for (auto it = vec.rbegin(); it != vec.rend(); ++it) {
-    cout << *it << endl;
-}
+T* begin();
+```
+- Returns a pointer to the first element in the vector.
+
+### `end` Method
+```cpp
+T* end();
+```
+- Returns a pointer to one past the last element in the vector.
+
+### `Reverse` Iterators
+```cpp
+std::reverse_iterator<T*> rbegin();
+std::reverse_iterator<T*> rend();
+```
+- Returns reverse iterators to the beginning and end of the vector.
+
+---
+
+## Sorting and Reversing
+
+### `sort` Method
+```cpp
+void sort();
+```
+- Sorts the vector using an appropriate algorithm based on the size of the array (insertion sort, quicksort, or merge sort).
+
+### `reverse` Method
+```cpp
+void reverse();
+```
+- Reverses the order of the elements in the vector.
+
+---
+
+## Rotation
+
+### `rotateLeft` Method
+```cpp
+void rotateLeft(int k);
+```
+- Rotates the vector to the left by k positions.
+
+### `rotateRight` Method
+```cpp
+void rotateRight(int k);
+```
+- Rotates the vector to the right by k positions.
+
+---
+
+## Finding Elements
+
+### `find` Method
+```cpp
+int find(T ele);
+```
+- Returns the position of the first occurrence of the element ele, or -1 if not found.
+
+### `findLast` Method
+```cpp
+int findLast(T ele);
+```
+- Returns the position of the last occurrence of the element ele, or -1 if not found.
+
+---
+
+## Private Helper Methods
+
+### `new_allocation` Method
+```cpp
+void new_allocation();
+```
+- Resizes the internal array to double its current capacity.
+
+### Helper methods for sorting the vector using merge sort and quicksort.
+```cpp
+void merge(T* arr, int l, int mid, int r);
+int partition(T* arr, int low, int high);
+void quickSort(T* arr, int low, int high);
 ```
 
-## Custom Methods
+---
 
-### `sort(int start, int end)`
-- **Description:** Sorts the elements in the range `[start, end]`. Automatically uses insertion sort, quick sort, or merge sort based on the size of the range.
+## Member Variables
 
-### `find(T ele)`
-- **Description:** Returns the index of the first occurrence of `ele`. Returns `-1` if not found.
-
-### `findLast(T ele)`
-- **Description:** Returns the index of the last occurrence of `ele`. Returns `-1` if not found.
-
-### `reverse(int left, int right)`
-- **Description:** Reverses the elements between indices `left` and `right`.
-
-### `rotateLeft(int k)`
-- **Description:** Rotates the vector to the left by `k` positions.
-
-### `rotateRight(int k)`
-- **Description:** Rotates the vector to the right by `k` positions.
-
-## Sorting Algorithms
-
-The class includes helper methods for sorting:
-
-- **Insertion Sort:** Used for small ranges.
-- **Quick Sort:** Used for medium-sized ranges.
-- **Merge Sort:** Used for large ranges.
-
-## Example Usage
-
-```cpp
-customVector<int> vec = {10, 20, 30, 40, 50};
-vec.push_back(60);
-vec.pop_back();
-vec.sort();
-```
+- `T* arr`: Pointer to the dynamically allocated array that stores the elements.
+- `size_t c`: The total allocated capacity of the array.
+- `size_t s`: The current number of elements in the vector.
