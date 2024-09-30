@@ -5,6 +5,8 @@ This project is a custom implementation of the Standard Template Library (STL) i
 ## Overview
 The CustomSTL header serves as a comprehensive collection of various custom data structures and algorithms. This header file includes implementations of essential data structures like trees, graphs, stacks, queues, heaps, and custom container classes. It is designed to provide flexibility and modularity, allowing users to use these custom implementations in their projects.
 
+---
+
 ## Included Data Structures
 The following data structures and classes are included in the CustomSTL header:
 
