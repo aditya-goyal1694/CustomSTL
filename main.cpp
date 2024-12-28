@@ -85,61 +85,61 @@ int main() {
   // -------------------------------------------------------------------------------------------------------------------------------------------
   // LINKED LIST
 
-  // cout<<endl<<endl<<"LINKED LIST"<<endl<<endl;
+  cout<<endl<<endl<<"LINKED LIST"<<endl<<endl;
 
-  // LinkedList<int> list;
+  LinkedList<int> list;
 
-  // // Insert elements
-  // cout << "Inserting elements: 10, 20, 30, 40, 50" << endl;
-  // list.insert(10);
-  // list.insert(20);
-  // list.insert(30);
-  // list.insert(40);
-  // list.insert(50);
-  // list.printList();
+  // Insert elements
+  cout << "Inserting elements: 10, 20, 30, 40, 50" << endl;
+  list.insert(10);
+  list.insert(20);
+  list.insert(30);
+  list.insert(40);
+  list.insert(50);
+  list.printList();
 
-  // // Insert at specific position
-  // cout << "Inserting 25 at position 2" << endl;
-  // list.insert(25, 2);
-  // list.printList();
+  // Insert at specific position
+  cout << "Inserting 25 at position 2" << endl;
+  list.insert(25, 2);
+  list.printList();
 
-  // // Delete an element
-  // cout << "Deleting element 30" << endl;
-  // list.deleteNode(30);
-  // list.printList();
+  // Delete an element
+  cout << "Deleting element 30" << endl;
+  list.deleteNode(30);
+  list.printList();
 
-  // // Delete from the end
-  // cout << "Deleting last element" << endl;
-  // list.deleteNode();
-  // list.printList();
+  // Delete from the end
+  cout << "Deleting last element" << endl;
+  list.deleteNode();
+  list.printList();
 
-  // // Find an element
-  // try {
-  //     cout << "Finding element 20 at position: " << list.find(20) << endl;
-  // } catch (const runtime_error& e) {
-  //     cout << e.what() << endl;
-  // }
+  // Find an element
+  try {
+      cout << "Finding element 20 at position: " << list.find(20) << endl;
+  } catch (const runtime_error& e) {
+      cout << e.what() << endl;
+  }
 
-  // // Sort the list
-  // cout << "Sorting the list" << endl;
-  // list.sort();
-  // list.printList();
+  // Sort the list
+  cout << "Sorting the list" << endl;
+  list.sort();
+  list.printList();
 
-  // // Reverse the list
-  // cout << "Reversing the list" << endl;
-  // list.reverse();
-  // list.printList();
+  // Reverse the list
+  cout << "Reversing the list" << endl;
+  list.reverse();
+  list.printList();
 
-  // // Rotate the list
-  // cout << "Rotating the list left by 2" << endl;
-  // list.rotateLeft(2);
-  // list.printList();
+  // Rotate the list
+  cout << "Rotating the list left by 2" << endl;
+  list.rotateLeft(2);
+  list.printList();
 
-  // cout << "Rotating the list right by 1" << endl;
-  // list.rotateRight(1);
-  // list.printList();
+  cout << "Rotating the list right by 1" << endl;
+  list.rotateRight(1);
+  list.printList();
 
-  // //
+  //
   // -------------------------------------------------------------------------------------------------------------------------------------------
   // // CIRCULAR LINKED LIST
 
