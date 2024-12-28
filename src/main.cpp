@@ -6,7 +6,6 @@ using namespace std;
 
 int main() {
   // // VECTOR
-
   // cout<<"VECTOR"<<endl<<endl;
 
   // customVector<int> vec;
