@@ -81,11 +81,10 @@ C++ compiler (e.g., GCC or Clang)
 Basic understanding of data structures and algorithms
 
 ### Installation
-Clone the repository:
+1. Download the `CustomSTL-1.0-win32.zip` or `CustomSTL-1.0-win32.tar.gz`.
+2. Extract the contents of the archive.
+3. Include the `include/` folder in your C++ project and use the `customSTL.h` header for access to the library.
 
-bash
-Copy code
-git clone https://github.com/your-repo/custom-stl.git
 
 ### Usage
 To use the data structures in this header, include CustomSTL.h in your project:
