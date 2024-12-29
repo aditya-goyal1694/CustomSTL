@@ -25,7 +25,7 @@ include(CPack)
 
 # Configure CPack settings
 set(CPACK_PACKAGE_NAME "CustomSTL")
-set(CPACK_PACKAGE_VERSION ${"1.0"})
+set(CPACK_PACKAGE_VERSION "1.0")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Custom STL Implementation")
 set(CPACK_PACKAGE_VENDOR "Aditya Goyal")
 set(CPACK_PACKAGE_CONTACT "adityamr.1694@gmail.com")
