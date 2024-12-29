@@ -1,0 +1,13 @@
+# Ignore build directories and files
+/build/
+CMakeCache.txt
+CMakeFiles/
+
+# Ignore executable files
+*.exe
+*.out
+
+# Ignore IDE and OS-specific files
+.vscode/
+.idea/
+.DS_Store
