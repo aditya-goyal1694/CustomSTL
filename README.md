@@ -98,7 +98,7 @@ The CustomSTL header is modular, meaning each data structure is defined in its o
 - Basic understanding of data structures and algorithms
 
 ### Installation
-1. Download the `CustomSTL-1.0-win32.zip` or `CustomSTL-1.0-win32.tar.gz`.
+1. Download the `CustomSTL-2.0-win32.zip` or `CustomSTL-2.0-win32.tar.gz`.
 2. Extract the contents of the archive.
 3. Include the `include/` folder in your C++ project and use the `customSTL.h` header for access to the library.
 
