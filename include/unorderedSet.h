@@ -117,6 +117,10 @@ public:
         }
         return nullptr;
     }
+
+    int size() {
+        return size;
+    }
 };
 
 #endif
