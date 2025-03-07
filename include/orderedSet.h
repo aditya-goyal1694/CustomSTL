@@ -105,7 +105,7 @@ public:
         return find(root, key) ? 1 : 0;
     }
 
-    int getSize() {
+    int size() {
         return size;
     }
 };
