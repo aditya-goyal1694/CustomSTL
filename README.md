@@ -1,9 +1,10 @@
 # Custom STL in C++
+
 ## Introduction
-This project is a custom implementation of the Standard Template Library (STL) in C++. It features various data structures, including vectors, stacks, queues, linked lists, and trees, with additional custom methods for enhanced functionality.
+This project is a custom implementation of the Standard Template Library (STL) in C++. It features various data structures, including vectors, stacks, queues, linked lists, trees, and maps, with additional custom methods for enhanced functionality.
 
 ## Overview
-The CustomSTL header serves as a comprehensive collection of various custom data structures and algorithms. This header file includes implementations of essential data structures like trees, graphs, stacks, queues, heaps, and custom container classes. It is designed to provide flexibility and modularity, allowing users to use these custom implementations in their projects.
+The CustomSTL header serves as a comprehensive collection of various custom data structures and algorithms. This header file includes implementations of essential data structures like trees, graphs, stacks, queues, heaps, maps, and custom container classes. It is designed to provide flexibility and modularity, allowing users to use these custom implementations in their projects.
 
 ---
 
@@ -52,50 +53,63 @@ Represents an undirected graph. Includes various graph algorithms such as DFS, B
 ### Directed Graph (directedGraph.h)
 Represents a graph with directed edges. Contains methods for traversal (DFS, BFS), topological sorting, and shortest path algorithms.
 
+### Custom Unordered Map (unorderedMap.h)
+A hash table-based key-value data structure providing average O(1) time complexity for insert, find, and erase operations.
+
+### Custom Ordered Map (orderedMap.h)
+A self-balancing binary search tree-based key-value data structure providing ordered key traversal with logarithmic insert, find, and erase operations.
+
+### Custom Unordered Set (unorderedSet.h)
+A hash table-based set implementation offering average O(1) time complexity for insert, find, and erase operations.
+
+### Custom Ordered Set (orderedSet.h)
+A self-balancing binary search tree-based set implementation that maintains elements in sorted order with logarithmic time complexity for insert, find, and erase operations.
+
 ---
 
 ## Structure
 The CustomSTL header is modular, meaning each data structure is defined in its own file. Below is the list of files included in CustomSTL.h:
 
-- `binaryTree.h`: Contains the BinaryTree class implementation.
-- `bst.h`: Contains the BST (Binary Search Tree) class implementation.
-- `circularLinkedList.h`: Contains the CircularLinkedList class implementation.
-- `customDeque.h`: Contains the CustomDeque class implementation.
-- `customQueue.h`: Contains the CustomQueue class implementation.
-- `customStack.h`: Contains the CustomStack class implementation.
-- `customVector.h`: Contains the CustomVector class implementation.
-- `directedGraph.h`: Contains the DirectedGraph class implementation.
-- `doublyLinkedList.h`: Contains the DoublyLinkedList class implementation.
-- `graph.h`: Contains the Graph class implementation.
-- `linkedList.h`: Contains the LinkedList class implementation.
-- `maxheap.h`: Contains the MaxHeap class implementation.
-- `minheap.h`: Contains the MinHeap class implementation.
-- `monotonicStack.h`: Contains the MonotonicStack class implementation.
+- `binaryTree.h`
+- `bst.h`
+- `circularLinkedList.h`
+- `customDeque.h`
+- `customQueue.h`
+- `customStack.h`
+- `customVector.h`
+- `directedGraph.h`
+- `doublyLinkedList.h`
+- `graph.h`
+- `linkedList.h`
+- `maxheap.h`
+- `minheap.h`
+- `monotonicStack.h`
+- `unorderedMap.h`
+- `orderedMap.h`
+- `unorderedSet.h`
+- `orderedSet.h`
 
 ---
 
 ## Getting Started
 
 ### Prerequisites
-C++ compiler (e.g., GCC or Clang)
-Basic understanding of data structures and algorithms
+- C++ compiler (e.g., GCC or Clang)
+- Basic understanding of data structures and algorithms
 
 ### Installation
 1. Download the `CustomSTL-1.0-win32.zip` or `CustomSTL-1.0-win32.tar.gz`.
 2. Extract the contents of the archive.
 3. Include the `include/` folder in your C++ project and use the `customSTL.h` header for access to the library.
 
-
 ### Usage
 To use the data structures in this header, include CustomSTL.h in your project:
+
 ```cpp
 #include "CustomSTL.h"
 ```
-You can then use any of the included data structures by including the corresponding header file. Each data structure has its own comprehensive set of methods and operations to suit your needs.
 
-Example
-Here is a simple example demonstrating how to use some of the custom data structures:
-
+Example:
 ```cpp
 #include "CustomSTL.h"
 #include <iostream>
@@ -112,14 +126,11 @@ int main() {
     stack.push(20);
     std::cout << "Top element: " << stack.top() << std::endl;
     
-    // Using binary search tree
-    BST<int> bst;
-    bst.insert(15);
-    bst.insert(10);
-    bst.insert(20);
-    
-    // Traversing the BST
-    bst.inorderTraversal();  // Output: 10 15 20
+    // Using ordered map
+    orderedMap<int, std::string> omap;
+    omap[1] = "Apple";
+    omap[2] = "Banana";
+    std::cout << "Value at key 1: " << omap[1] << std::endl;
     
     return 0;
 }
@@ -127,28 +138,20 @@ int main() {
 
 ### Compiling
 Compile your C++ program with any C++ compiler:
-
-bash
-Copy code
+```bash
 g++ main.cpp -o main
 ./main
+```
 
 ---
 
 ## Custom Methods
-- Sorting
-The sort() function is implemented in various data structures such as vector, stack, and linked list. This method sorts the elements in ascending order.
-
-- BFS & DFS (Graphs)
-Graph traversal methods are provided to explore nodes using BFS and DFS techniques.
-
+- Sorting (`sort()` for vector, stack, linked list)
+- BFS & DFS (Graph traversal)
 - Max Element & Min Element
-You can find the maximum and minimum elements using maxElement() and minElement() methods in applicable data structures.
-
 - Array Rotation
-The rotate() method shifts the elements of arrays or lists by a given number of positions.
-
--and many more...
+- Hashing-based lookups for unorderedMap and unorderedSet
+- Logarithmic access for orderedMap and orderedSet
 
 ---
 
@@ -156,14 +159,14 @@ The rotate() method shifts the elements of arrays or lists by a given number of 
 - Extend the functionality to support more complex algorithms.
 - Add parallel processing for certain operations.
 - Optimize the current methods for better performance.
-- Implement topoSort for DAGs
-- Implement Sorting for Circular Linked Lists.
+- Implement topoSort for DAGs.
+- Implement sorting for Circular Linked Lists.
 
 ---
 
 ## References
 - cplusplus.com: For STL documentation.
-- geeksforgeeks.com: For some methods understanding and implementation. 
+- geeksforgeeks.com: For some methods understanding and implementation.
 - chat.openai.com: For debugging purposes.
 - google.com: For random queries.
 

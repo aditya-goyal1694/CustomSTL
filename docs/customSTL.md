@@ -1,7 +1,7 @@
 # CustomSTL Documentation
 
 ## Overview
-The CustomSTL header serves as a comprehensive collection of various custom data structures and algorithms. This header file includes implementations of essential data structures like trees, graphs, stacks, queues, heaps, and custom container classes. It is designed to provide flexibility and modularity, allowing users to use these custom implementations in their projects.
+The CustomSTL header serves as a comprehensive collection of various custom data structures and algorithms. This header file includes implementations of essential data structures like trees, graphs, stacks, queues, heaps, custom container classes, and hash-based maps and sets. It is designed to provide flexibility and modularity, allowing users to use these custom implementations in their projects.
 
 ## Included Data Structures
 The following data structures and classes are included in the CustomSTL header:
@@ -48,6 +48,18 @@ Represents an undirected graph. Includes various graph algorithms such as DFS, B
 ### Directed Graph (directedGraph.h)
 Represents a graph with directed edges. Contains methods for traversal (DFS, BFS), topological sorting, and shortest path algorithms.
 
+### Unordered Map (unorderedMap.h)
+A hash-based key-value data structure similar to `std::unordered_map`. Provides constant-time average complexity for insert, delete, and lookup operations.
+
+### Ordered Map (orderedMap.h)
+A balanced binary search tree-based key-value data structure similar to `std::map`. Maintains keys in sorted order and provides logarithmic time complexity for insert, delete, and lookup operations.
+
+### Unordered Set (unorderedSet.h)
+A hash-based implementation of a set similar to `std::unordered_set`. Supports fast average-time complexity for insert, delete, and lookup operations.
+
+### Ordered Set (orderedSet.h)
+A balanced binary search tree-based implementation of a set similar to `std::set`. Maintains elements in sorted order and provides logarithmic time complexity for operations.
+
 ---
 
 ## Usage
@@ -57,7 +69,7 @@ To use the data structures in this header, include CustomSTL.h in your project:
 ```
 You can then use any of the included data structures by including the corresponding header file. Each data structure has its own comprehensive set of methods and operations to suit your needs.
 
-Example
+Example:
 Here is a simple example demonstrating how to use some of the custom data structures:
 
 ```cpp
@@ -108,6 +120,10 @@ The CustomSTL header is modular, meaning each data structure is defined in its o
 - `maxheap.h`: Contains the MaxHeap class implementation.
 - `minheap.h`: Contains the MinHeap class implementation.
 - `monotonicStack.h`: Contains the MonotonicStack class implementation.
+- `unorderedMap.h`: Contains the UnorderedMap class implementation.
+- `orderedMap.h`: Contains the OrderedMap class implementation.
+- `unorderedSet.h`: Contains the UnorderedSet class implementation.
+- `orderedSet.h`: Contains the OrderedSet class implementation.
 
 ---
 
