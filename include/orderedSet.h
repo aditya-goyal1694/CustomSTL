@@ -1,41 +1,40 @@
 #include <iostream>
 using namespace std;
 
-#ifndef ORDERED_MAP_H
-#define ORDERED_MAP_H
+#ifndef ORDERED_SET_H
+#define ORDERED_SET_H
 
-template <typename K, typename V>
-class OrderedMap {
+template <typename T>
+class OrderedSet {
 private:
     struct Node {
-        K key;
-        V value;
+        T key;
         Node* left;
         Node* right;
 
-        Node(K k, V v) : key(k), value(v), left(nullptr), right(nullptr) {}
+        Node(T k) : key(k), left(nullptr), right(nullptr) {}
     };
 
     Node* root;
     int size;
 
-    Node* insert(Node* node, K key, V value, bool& exists) {
+    Node* insert(Node* node, T key, bool& exists) {
         if (!node) {
             size++;
-            return new Node(key, value);
+            return new Node(key);
         }
 
         if (key < node->key)
-            node->left = insert(node->left, key, value, exists);
+            node->left = insert(node->left, key, exists);
         else if (key > node->key)
-            node->right = insert(node->right, key, value, exists);
+            node->right = insert(node->right, key, exists);
         else
             exists = true;
 
         return node;
     }
 
-    Node* erase(Node* node, K key) {
+    Node* erase(Node* node, T key) {
         if (!node) return nullptr;
 
         if (key < node->key)
@@ -55,19 +54,15 @@ private:
                 return temp;
             }
 
-            // Node with two children - replace with inorder successor
             Node* temp = findMin(node->right);
             node->key = temp->key;
-            node->value = temp->value;
             node->right = erase(node->right, temp->key);
         }
-
         return node;
     }
 
-    Node* find(Node* node, K key) {
+    Node* find(Node* node, T key) {
         if (!node || node->key == key) return node;
-
         if (key < node->key) return find(node->left, key);
         return find(node->right, key);
     }
@@ -87,42 +82,32 @@ private:
     }
 
 public:
-    OrderedMap() : root(nullptr), size(0) {}
+    OrderedSet() : root(nullptr), size(0) {}
 
-    ~OrderedMap() {
+    ~OrderedSet() {
         destroyTree(root);
     }
 
-    void insert(K key, V value) {
+    void insert(T key) {
         bool exists = false;
-        root = insert(root, key, value, exists);
+        root = insert(root, key, exists);
     }
 
-    V& operator[](const K& key) {
-        Node* node = find(root, key);
-        if (node) return node->value;
-
-        bool exists = false;
-        root = insert(root, key, V{}, exists);
-        return find(root, key)->value;
-    }
-
-    void erase(const K& key) {
+    void erase(const T& key) {
         root = erase(root, key);
     }
 
-    Node* find(K key) {
-        return find(root, key);
+    bool find(T key) {
+        return find(root, key) != nullptr;
     }
 
-    int count(const K& key) {
+    int count(const T& key) {
         return find(root, key) ? 1 : 0;
     }
 
-    int size() {
+    int getSize() {
         return size;
     }
-
 };
 
 #endif
