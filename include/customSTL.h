@@ -15,6 +15,9 @@
 #include "maxheap.h"
 #include "minheap.h"
 #include "monotonicStack.h"
-
+#include "unorderedMap.h"
+#include "unorderedSet.h"
+#include "orderedMap.h"
+#include "orderedSet.h"
 
 #endif
